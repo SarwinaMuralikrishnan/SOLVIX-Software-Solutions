@@ -1,0 +1,5 @@
+# SOLVIX Official Web Crawler Rules
+User-agent: *
+Allow: /
+
+Sitemap: https://www.solvixsoftwaresolutions.com/sitemap.xml

@@ -1,0 +1,110 @@
+/* =========================================================
+   SOLVIX UNIFIED ANIMATION LANGUAGE & BRAND STYLING
+   ========================================================= */
+
+/* --- 1. SOLVIX "S" LOGO RIBBON SHIMMER --- */
+.solvix-logo-svg {
+  transition: filter 0.3s ease;
+}
+
+.solvix-logo-svg:hover {
+  filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.55));
+}
+
+/* Floating Pixel Digital Squares */
+.solvix-pixel-sq1 {
+  animation: solvix-pixel-bounce-1 3s ease-in-out infinite alternate;
+}
+
+.solvix-pixel-sq2 {
+  animation: solvix-pixel-bounce-2 3.5s ease-in-out infinite alternate;
+}
+
+.solvix-pixel-sq3 {
+  animation: solvix-pixel-bounce-3 4s ease-in-out infinite alternate;
+}
+
+@keyframes solvix-pixel-bounce-1 {
+  0% { transform: translateY(0px) rotate(0deg); }
+  100% { transform: translateY(-4px) rotate(3deg); }
+}
+
+@keyframes solvix-pixel-bounce-2 {
+  0% { transform: translateY(0px) rotate(0deg); }
+  100% { transform: translateY(4px) rotate(-3deg); }
+}
+
+@keyframes solvix-pixel-bounce-3 {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.15); }
+}
+
+/* Code Symbol </> Breathing Pulse */
+.solvix-code-symbol {
+  transform-origin: center;
+  animation: solvix-code-breathe 4s ease-in-out infinite alternate;
+}
+
+@keyframes solvix-code-breathe {
+  0% { opacity: 0.85; transform: scale(0.98); }
+  100% { opacity: 1; transform: scale(1.02); }
+}
+
+/* --- 2. 5-STAGE BRAND CONCEPT CONNECTING LINE --- */
+.solvix-concept-line {
+  stroke-dasharray: 8;
+  animation: solvix-flow-line 20s linear infinite;
+}
+
+@keyframes solvix-flow-line {
+  to {
+    stroke-dashoffset: -100;
+  }
+}
+
+/* --- 3. STAGE CARD HOVER MICRO-INTERACTIONS --- */
+.solvix-stage-card {
+  position: relative;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 20px;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+}
+
+.solvix-stage-card:hover {
+  transform: translateY(-4px);
+  border-color: #2563EB;
+  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.12);
+}
+
+.solvix-stage-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #2563EB;
+  background: rgba(37, 99, 235, 0.06);
+  border: 1px solid rgba(37, 99, 235, 0.15);
+  padding: 4px 10px;
+  border-radius: 9999px;
+  margin-bottom: 12px;
+}
+
+/* --- 4. ACCESSIBILITY REDUCED MOTION --- */
+@media (prefers-reduced-motion: reduce) {
+  .solvix-pixel-sq1,
+  .solvix-pixel-sq2,
+  .solvix-pixel-sq3,
+  .solvix-code-symbol,
+  .solvix-concept-line,
+  .solvix-stage-card {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+}

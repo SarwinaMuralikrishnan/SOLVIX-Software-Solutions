@@ -1,0 +1,694 @@
+/* =========================================================
+   SOLVIX AI CHATBOT — MODERN SAAS / AI ASSISTANT STYLING
+   ========================================================= */
+
+/* --- 1. FLOATING BOT BUTTON --- */
+.solvix-chat-trigger-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+}
+
+.solvix-chat-trigger-btn {
+  position: relative;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #2563EB;
+  color: #FFFFFF;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
+  transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.solvix-chat-trigger-btn:hover {
+  background: #1D4ED8;
+  transform: scale(1.05);
+  box-shadow: 0 10px 28px rgba(37, 99, 235, 0.45);
+}
+
+.solvix-chat-trigger-btn:active {
+  transform: scale(0.96);
+}
+
+/* Subtle Pulse Ring */
+.solvix-chat-pulse-ring {
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 2px solid rgba(37, 99, 235, 0.5);
+  animation: solvix-subtle-pulse 2.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+  pointer-events: none;
+}
+
+@keyframes solvix-subtle-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.12);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+/* Floating Tooltip */
+.solvix-chat-tooltip {
+  position: absolute;
+  right: 68px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #0F172A;
+  color: #FFFFFF;
+  font-size: 0.80rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 8px;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.solvix-chat-trigger-container:hover .solvix-chat-tooltip {
+  opacity: 1;
+  transform: translateY(-50%) translateX(-4px);
+}
+
+/* --- 2. CHAT WINDOW PANEL --- */
+.solvix-chat-panel {
+  position: fixed;
+  bottom: 92px;
+  right: 24px;
+  z-index: 9999;
+  width: 390px;
+  height: 620px;
+  max-height: 75vh;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 18px;
+  box-shadow: 0 12px 36px rgba(15, 23, 42, 0.12);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  animation: solvix-panel-fade-in 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes solvix-panel-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* --- 3. HEADER --- */
+.solvix-chat-header {
+  height: 64px;
+  padding: 0 18px;
+  background: #FFFFFF;
+  border-bottom: 1px solid #F1F5F9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.solvix-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.solvix-header-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #2563EB;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.solvix-header-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.solvix-header-title {
+  font-size: 0.94rem;
+  font-weight: 700;
+  color: #0F172A;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.solvix-header-subtitle {
+  font-size: 0.76rem;
+  color: #64748B;
+  margin: 1px 0 0 0;
+  line-height: 1.2;
+}
+
+.solvix-header-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  color: #10B981;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.solvix-status-dot {
+  width: 6px;
+  height: 6px;
+  background-color: #10B981;
+  border-radius: 50%;
+}
+
+.solvix-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+}
+
+.solvix-header-icon-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: transparent;
+  border: none;
+  color: #64748B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.solvix-header-icon-btn:hover {
+  background: #F1F5F9;
+  color: #0F172A;
+}
+
+/* Header Dropdown Menu */
+.solvix-header-dropdown {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
+  padding: 6px;
+  min-width: 170px;
+  z-index: 10001;
+  animation: solvix-dropdown-fade 0.15s ease;
+}
+
+@keyframes solvix-dropdown-fade {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.solvix-dropdown-item {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #334155;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.solvix-dropdown-item:hover {
+  background: #F8FAFC;
+  color: #2563EB;
+}
+
+.solvix-dropdown-item.danger:hover {
+  background: #FEF2F2;
+  color: #EF4444;
+}
+
+/* --- 4. CHAT BODY --- */
+.solvix-chat-body {
+  flex: 1;
+  padding: 18px 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: #FAFAFA;
+}
+
+.solvix-chat-body::-webkit-scrollbar {
+  width: 5px;
+}
+
+.solvix-chat-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.solvix-chat-body::-webkit-scrollbar-thumb {
+  background: #E2E8F0;
+  border-radius: 10px;
+}
+
+.solvix-chat-body::-webkit-scrollbar-thumb:hover {
+  background: #CBD5E1;
+}
+
+/* --- 5. WELCOME SCREEN --- */
+.solvix-welcome-container {
+  margin: auto 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px 10px;
+}
+
+.solvix-welcome-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #2563EB;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+}
+
+.solvix-welcome-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0 0 2px 0;
+}
+
+.solvix-welcome-subtitle {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #2563EB;
+  margin: 0 0 8px 0;
+}
+
+.solvix-welcome-desc {
+  font-size: 0.84rem;
+  color: #64748B;
+  line-height: 1.4;
+  margin: 0 0 20px 0;
+  max-width: 280px;
+}
+
+/* --- 6. QUICK ACTION CARDS --- */
+.solvix-quick-actions-grid {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.solvix-actions-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.solvix-quick-btn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  height: 40px;
+  padding: 0 12px;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+}
+
+.solvix-quick-btn:hover {
+  border-color: #2563EB;
+  background: #F8FAFC;
+  color: #2563EB;
+  transform: translateY(-1px);
+}
+
+.solvix-quick-btn-full {
+  width: 100%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #0F172A;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+}
+
+.solvix-quick-btn-full:hover {
+  border-color: #2563EB;
+  background: #F8FAFC;
+  color: #2563EB;
+  transform: translateY(-1px);
+}
+
+/* --- 7. MESSAGE BUBBLES --- */
+.solvix-msg-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+  animation: solvix-msg-fade 0.15s ease;
+}
+
+@keyframes solvix-msg-fade {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.solvix-msg-row.ai {
+  justify-content: flex-start;
+}
+
+.solvix-msg-row.user {
+  justify-content: flex-end;
+}
+
+.solvix-bot-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #2563EB;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.solvix-bubble {
+  max-width: 82%;
+  padding: 10px 14px;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.solvix-bubble.ai {
+  background: #FFFFFF;
+  color: #0F172A;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px 14px 14px 4px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.solvix-bubble.user {
+  background: #2563EB;
+  color: #FFFFFF;
+  border-radius: 14px 14px 4px 14px;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
+}
+
+/* Action Chips under AI Message */
+.solvix-msg-action-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.solvix-action-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: #F1F5F9;
+  border: 1px solid #CBD5E1;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #2563EB;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.solvix-action-chip:hover {
+  background: #2563EB;
+  border-color: #2563EB;
+  color: #FFFFFF;
+}
+
+/* --- 8. TYPING INDICATOR --- */
+.solvix-typing-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+}
+
+.solvix-typing-bubble {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 14px;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px 14px 14px 4px;
+}
+
+.solvix-dot {
+  width: 6px;
+  height: 6px;
+  background: #94A3B8;
+  border-radius: 50%;
+  animation: solvix-dot-pulse 1.2s infinite ease-in-out;
+}
+
+.solvix-dot:nth-child(1) { animation-delay: 0s; }
+.solvix-dot:nth-child(2) { animation-delay: 0.2s; }
+.solvix-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes solvix-dot-pulse {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+/* --- 9. INPUT AREA --- */
+.solvix-chat-footer {
+  padding: 12px 14px;
+  background: #FFFFFF;
+  border-top: 1px solid #F1F5F9;
+  flex-shrink: 0;
+}
+
+.solvix-input-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+  max-height: 100px;
+  padding: 6px 6px 6px 14px;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.solvix-input-container:focus-within {
+  border-color: #2563EB;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.solvix-input-textarea {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: inherit;
+  font-size: 0.88rem;
+  color: #0F172A;
+  resize: none;
+  max-height: 80px;
+  line-height: 1.4;
+  padding: 4px 0;
+}
+
+.solvix-input-textarea::placeholder {
+  color: #94A3B8;
+}
+
+.solvix-send-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #2563EB;
+  color: #FFFFFF;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color 0.15s ease, opacity 0.15s ease, transform 0.15s ease;
+}
+
+.solvix-send-btn:hover:not(:disabled) {
+  background: #1D4ED8;
+  transform: scale(1.04);
+}
+
+.solvix-send-btn:disabled {
+  background: #E2E8F0;
+  color: #94A3B8;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* --- 10. ESTIMATE RESULT UI CARD --- */
+.solvix-estimate-card {
+  width: 100%;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+  margin-top: 4px;
+}
+
+.solvix-estimate-header {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: #64748B;
+  text-transform: uppercase;
+  border-bottom: 1px solid #F1F5F9;
+  padding-bottom: 6px;
+}
+
+.solvix-estimate-title {
+  font-size: 0.94rem;
+  font-weight: 800;
+  color: #0F172A;
+}
+
+.solvix-estimate-category {
+  font-size: 0.78rem;
+  color: #2563EB;
+  font-weight: 600;
+}
+
+.solvix-estimate-price {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #2563EB;
+  margin-top: 2px;
+}
+
+.solvix-estimate-btn {
+  width: 100%;
+  height: 38px;
+  background: #2563EB;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  margin-top: 4px;
+}
+
+.solvix-estimate-btn:hover {
+  background: #1D4ED8;
+}
+
+/* --- 11. RESPONSIVENESS & REDUCED MOTION --- */
+@media (max-width: 480px) {
+  .solvix-chat-trigger-container {
+    bottom: 16px;
+    right: 16px;
+  }
+
+  .solvix-chat-trigger-btn {
+    width: 54px;
+    height: 54px;
+  }
+
+  .solvix-chat-panel {
+    bottom: 12px;
+    right: 12px;
+    left: 12px;
+    width: calc(100vw - 24px);
+    height: calc(100vh - 32px);
+    max-height: 100vh;
+    max-width: 430px;
+    margin: 0 auto;
+    border-radius: 18px;
+  }
+
+  .solvix-chat-tooltip {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .solvix-chat-pulse-ring,
+  .solvix-dot,
+  .solvix-chat-panel,
+  .solvix-msg-row,
+  .solvix-header-dropdown {
+    animation: none !important;
+    transition: none !important;
+  }
+}
