@@ -1,4 +1,46 @@
 const supabase = require("../config/supabase");
+const fs = require("fs");
+const path = require("path");
+
+const DB_FILE = path.join(__dirname, "../data/db.json");
+
+// Helper: Log Admin Action to Audit Logs
+const logAuditAction = async (adminUsername, recordType, recordId, action, details) => {
+  const logEntry = {
+    id: `LOG-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+    timestamp: new Date().toISOString(),
+    admin_username: adminUsername || "admin",
+    record_type: recordType,
+    record_id: recordId,
+    action,
+    details
+  };
+
+  try {
+    // Attempt Supabase insert
+    if (supabase) {
+      try {
+        await supabase.from("audit_logs").insert([logEntry]);
+      } catch (sbErr) {
+        // Ignored if table not created in Supabase yet
+      }
+    }
+
+    // Persist in local JSON database
+    if (fs.existsSync(DB_FILE)) {
+      const currentDb = JSON.parse(fs.readFileSync(DB_FILE, "utf-8"));
+      if (!currentDb.audit_logs) currentDb.audit_logs = [];
+      currentDb.audit_logs.unshift(logEntry);
+      // Keep last 200 audit logs
+      if (currentDb.audit_logs.length > 200) {
+        currentDb.audit_logs = currentDb.audit_logs.slice(0, 200);
+      }
+      fs.writeFileSync(DB_FILE, JSON.stringify(currentDb, null, 2));
+    }
+  } catch (err) {
+    console.error("Audit log recording error:", err.message);
+  }
+};
 
 // ==============================
 // GET CONTACTS
@@ -89,7 +131,48 @@ exports.getSubscribers = async (req, res) => {
 };
 
 // ==============================
-// GET ALL ENQUIRIES & DATA
+// GET AUDIT LOGS
+// ==============================
+exports.getAuditLogs = async (req, res) => {
+  try {
+    let logs = [];
+    if (fs.existsSync(DB_FILE)) {
+      const db = JSON.parse(fs.readFileSync(DB_FILE, "utf-8"));
+      logs = db.audit_logs || [];
+    }
+    res.json({ success: true, data: logs });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// ==============================
+// GET EMAIL SYSTEM DIAGNOSTICS
+// ==============================
+exports.getEmailStatus = async (req, res) => {
+  try {
+    const resendKeyConfigured = Boolean(
+      process.env.RESEND_API_KEY &&
+      !process.env.RESEND_API_KEY.includes("your_resend") &&
+      !process.env.RESEND_API_KEY.includes("your_actual_resend_key")
+    );
+
+    const emailStatus = {
+      connected: resendKeyConfigured,
+      statusMessage: resendKeyConfigured ? "Resend Integration Operational" : "Resend API Key Missing / Unconfigured",
+      configuredNotificationEmail: process.env.NOTIFICATION_EMAIL || "contact@solvixsoftwaresolutions.com",
+      fromEmail: process.env.FROM_EMAIL || "SOLVIX Software Solutions <contact@solvixsoftwaresolutions.com>",
+      provider: "Resend Email API"
+    };
+
+    res.json({ success: true, emailStatus });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// ==============================
+// GET ALL ENQUIRIES & DASHBOARD DATA
 // ==============================
 exports.getAllEnquiries = async (req, res) => {
   try {
@@ -113,13 +196,47 @@ exports.getAllEnquiries = async (req, res) => {
       .select("*")
       .order("created_at", { ascending: false });
 
+    // Separate AI Leads from quotes (records with source === 'ai_chatbot' or description starting with '[AI Chatbot Lead]')
+    const allQuotesList = quotes || [];
+    const aiLeads = allQuotesList.filter(
+      (q) => q.source === "ai_chatbot" || (q.description && q.description.includes("[AI Chatbot Lead]"))
+    );
+    const standardQuotes = allQuotesList.filter(
+      (q) => q.source !== "ai_chatbot" && (!q.description || !q.description.includes("[AI Chatbot Lead]"))
+    );
+
+    // Read audit logs from local DB or Supabase
+    let auditLogs = [];
+    if (fs.existsSync(DB_FILE)) {
+      const db = JSON.parse(fs.readFileSync(DB_FILE, "utf-8"));
+      auditLogs = db.audit_logs || [];
+    }
+
+    const resendKeyConfigured = Boolean(
+      process.env.RESEND_API_KEY &&
+      !process.env.RESEND_API_KEY.includes("your_resend") &&
+      !process.env.RESEND_API_KEY.includes("your_actual_resend_key")
+    );
+
+    const emailStatus = {
+      connected: resendKeyConfigured,
+      statusMessage: resendKeyConfigured ? "Resend Integration Operational" : "Resend API Key Unconfigured",
+      configuredNotificationEmail: process.env.NOTIFICATION_EMAIL || "contact@solvixsoftwaresolutions.com",
+      fromEmail: process.env.FROM_EMAIL || "SOLVIX Software Solutions <contact@solvixsoftwaresolutions.com>",
+      provider: "Resend Email API"
+    };
+
     res.json({
       success: true,
       contacts: contacts || [],
       consultations: consultations || [],
-      quotes: quotes || [],
-      messages: contacts || [], // alias for backwards compatibility
-      subscribers: subscribers || []
+      quotes: standardQuotes,
+      allQuotes: allQuotesList,
+      aiLeads: aiLeads,
+      messages: contacts || [],
+      subscribers: subscribers || [],
+      auditLogs: auditLogs,
+      emailStatus: emailStatus
     });
 
   } catch (err) {
@@ -159,6 +276,10 @@ exports.updateStatus = async (req, res) => {
       .select();
 
     if (error) throw error;
+
+    // Log admin audit action
+    const adminUser = req.admin?.username || "admin";
+    await logAuditAction(adminUser, type, id, "STATUS_UPDATE", `Changed status of ${type} record (${id}) to '${status}'`);
 
     res.json({
       success: true,
@@ -201,6 +322,10 @@ exports.deleteRecord = async (req, res) => {
       .eq("id", id);
 
     if (error) throw error;
+
+    // Log admin audit action
+    const adminUser = req.admin?.username || "admin";
+    await logAuditAction(adminUser, type, id, "DELETE_RECORD", `Permanently deleted record (${id}) from ${type}`);
 
     res.json({
       success: true,

@@ -9,6 +9,8 @@ const {
   getQuotes,
   getSubscribers,
   getAllEnquiries,
+  getAuditLogs,
+  getEmailStatus,
   updateStatus,
   deleteRecord
 } = require("../controllers/adminController");
@@ -28,6 +30,10 @@ router.get("/consultations", getConsultations);
 router.get("/quotes", getQuotes);
 
 router.get("/subscribers", getSubscribers);
+
+router.get("/logs", getAuditLogs);
+
+router.get("/email-status", getEmailStatus);
 
 router.patch("/enquiries/:type/:id", updateStatus);
 

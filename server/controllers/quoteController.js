@@ -46,22 +46,45 @@ exports.createQuote = async (req, res) => {
     }
 
     // 1. Insert into Supabase 'quotes' table FIRST
-    const { data, error } = await supabase
-      .from("quotes")
-      .insert([
-        {
-          name,
-          email,
-          phone,
-          company: company || "",
-          service: selectedService,
-          budget: selectedBudget,
-          timeline: selectedTimeline,
-          description,
-          status: "New"
-        }
-      ])
-      .select();
+    const insertPayload = {
+      name,
+      email,
+      phone,
+      company: company || "",
+      service: selectedService,
+      category: category || selectedService,
+      project_type: projectType || selectedService,
+      budget: selectedBudget,
+      timeline: selectedTimeline,
+      description,
+      meeting_method: meetingMethod || "Google Meet",
+      required_features: Array.isArray(requiredFeatures) ? requiredFeatures.join(", ") : (requiredFeatures || ""),
+      file_name: fileName || "",
+      source: "website",
+      status: "New"
+    };
+
+    let data, error;
+    try {
+      const result = await supabase.from("quotes").insert([insertPayload]).select();
+      data = result.data;
+      error = result.error;
+    } catch (sbErr) {
+      // Fallback to core fields if database table schema does not have extended columns
+      const fallbackResult = await supabase.from("quotes").insert([{
+        name,
+        email,
+        phone,
+        company: company || "",
+        service: selectedService,
+        budget: selectedBudget,
+        timeline: selectedTimeline,
+        description,
+        status: "New"
+      }]).select();
+      data = fallbackResult.data;
+      error = fallbackResult.error;
+    }
 
     if (error) {
       console.error("SUPABASE QUOTE INSERT ERROR:", error);

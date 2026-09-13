@@ -218,6 +218,30 @@ export const api = {
     }
   },
 
+  // 10b. Get Audit Logs (GET /api/admin/logs)
+  getAuditLogs: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/admin/logs`, {
+        headers: getHeaders(true),
+      });
+      return await handleResponse(response);
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // 10c. Get Email System Status (GET /api/admin/email-status)
+  getEmailStatus: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/admin/email-status`, {
+        headers: getHeaders(true),
+      });
+      return await handleResponse(response);
+    } catch (error) {
+      throw error;
+    }
+  },
+
   // 11. AI Chatbot Message (POST /api/chat)
   sendChatMessage: async (message, conversation = [], context = {}) => {
     try {
