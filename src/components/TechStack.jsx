@@ -52,6 +52,9 @@ export default function TechStack() {
     ],
     Mobile: [
       { name: 'Flutter', icon: Smartphone, color: '#0284C7', desc: 'Cross-Platform Engine' },
+      { name: 'Dart', icon: FileCode, color: '#0175C2', desc: 'Client-Optimized Language' },
+      { name: 'Android (Kotlin)', icon: Smartphone, color: '#7F52FF', desc: 'Native Android Dev' },
+      { name: 'iOS (Swift)', icon: Smartphone, color: '#F05138', desc: 'Native iOS Apps' },
     ],
     Cloud: [
       { name: 'AWS Cloud', icon: Cloud, color: '#D97706', desc: 'Cloud Infrastructure' },
