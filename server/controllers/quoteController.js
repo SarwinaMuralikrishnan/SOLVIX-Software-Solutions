@@ -91,8 +91,11 @@ exports.createQuote = async (req, res) => {
     };
 
     try {
-      await emailService.sendQuoteConfirmation(quotePayload);
-      await emailService.sendQuoteNotification(quotePayload);
+      await emailService.dispatchDualEmails(
+        emailService.sendQuoteConfirmation,
+        emailService.sendQuoteNotification,
+        quotePayload
+      );
     } catch (emailErr) {
       console.error("EMAIL_NOTIFICATION_FAILED for Quote Request:", emailErr.message);
     }

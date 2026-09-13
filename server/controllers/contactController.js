@@ -59,8 +59,11 @@ const submitContact = async (req, res) => {
     };
 
     try {
-      await emailService.sendContactConfirmation(contactPayload);
-      await emailService.sendContactNotification(contactPayload);
+      await emailService.dispatchDualEmails(
+        emailService.sendContactConfirmation,
+        emailService.sendContactNotification,
+        contactPayload
+      );
     } catch (emailErr) {
       console.error("EMAIL_NOTIFICATION_FAILED for Contact Enquiry:", emailErr.message);
     }

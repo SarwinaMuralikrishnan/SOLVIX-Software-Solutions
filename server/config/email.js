@@ -1,9 +1,18 @@
 const { Resend } = require("resend");
 
-const apiKey = process.env.RESEND_API_KEY;
-const resend = apiKey && !apiKey.includes("your_resend") ? new Resend(apiKey) : null;
+const getResendInstance = () => {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (apiKey && !apiKey.includes("your_resend") && !apiKey.includes("your_actual_resend_key")) {
+    return new Resend(apiKey);
+  }
+  return null;
+};
 
-const sendEmail = async ({ to, subject, html, replyTo }) => {
+// Helper: Sleep for ms
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const sendEmail = async ({ to, subject, html, replyTo }, retries = 2) => {
+  const resend = getResendInstance();
   const recipients = Array.isArray(to) ? to.join(", ") : to;
 
   console.log("==================================================");
@@ -14,37 +23,53 @@ const sendEmail = async ({ to, subject, html, replyTo }) => {
   console.log("==================================================");
 
   if (!resend) {
-    console.log("ℹ️ [EMAIL NOTICE] RESEND_API_KEY is missing or placeholder in server/.env.");
-    console.log("ℹ️ To receive real emails in your inbox, set RESEND_API_KEY in server/.env.");
-    return false;
+    console.warn("⚠️ [EMAIL NOTICE] RESEND_API_KEY is missing or placeholder. Skipping email dispatch.");
+    return { success: false, reason: "MISSING_OR_PLACEHOLDER_API_KEY" };
   }
 
-  try {
-    const payload = {
-      from: process.env.FROM_EMAIL || "SOLVIX Software Solutions <contact@solvixsoftwaresolutions.com>",
-      to,
-      subject,
-      html,
-    };
+  const fromAddress = process.env.FROM_EMAIL || "SOLVIX Software Solutions <contact@solvixsoftwaresolutions.com>";
 
-    if (replyTo) {
-      payload.replyTo = replyTo;
-    }
+  const payload = {
+    from: fromAddress,
+    to: Array.isArray(to) ? to : [to],
+    subject,
+    html,
+  };
 
-    const { data, error } = await resend.emails.send(payload);
-
-    if (error) {
-      console.error("EMAIL_NOTIFICATION_FAILED:", error.message || error);
-      console.log("💡 Tip: When using onboarding@resend.dev or testing mode, Resend ONLY allows sending to your registered Resend account email.");
-      return false;
-    }
-
-    console.log("✅ Email Delivered Successfully via Resend:", data);
-    return true;
-  } catch (err) {
-    console.error("EMAIL_NOTIFICATION_FAILED Exception:", err.message);
-    return false;
+  if (replyTo && typeof replyTo === "string" && replyTo.includes("@")) {
+    payload.replyTo = replyTo;
   }
+
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      const { data, error } = await resend.emails.send(payload);
+
+      if (error) {
+        console.error(`❌ RESEND ERROR (Attempt ${attempt}/${retries}):`, JSON.stringify(error, null, 2));
+        
+        // If rate limited (statusCode 429), wait 800ms and retry
+        if (error.statusCode === 429 && attempt < retries) {
+          console.log(`⏳ Rate limit detected. Retrying in 800ms...`);
+          await sleep(800);
+          continue;
+        }
+
+        return { success: false, error };
+      }
+
+      console.log(`✅ Email Delivered Successfully via Resend (Attempt ${attempt}):`, data);
+      return { success: true, data };
+    } catch (err) {
+      console.error(`❌ EXCEPTION DISPATCHING EMAIL (Attempt ${attempt}/${retries}):`, err.message);
+      if (attempt < retries) {
+        await sleep(800);
+      } else {
+        return { success: false, error: err.message };
+      }
+    }
+  }
+
+  return { success: false, reason: "MAX_RETRIES_EXCEEDED" };
 };
 
 module.exports = {

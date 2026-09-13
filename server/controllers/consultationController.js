@@ -85,8 +85,11 @@ exports.createConsultation = async (req, res) => {
     };
 
     try {
-      await emailService.sendConsultationConfirmation(consultationPayload);
-      await emailService.sendConsultationNotification(consultationPayload);
+      await emailService.dispatchDualEmails(
+        emailService.sendConsultationConfirmation,
+        emailService.sendConsultationNotification,
+        consultationPayload
+      );
     } catch (emailErr) {
       console.error("EMAIL_NOTIFICATION_FAILED for Consultation Booking:", emailErr.message);
     }

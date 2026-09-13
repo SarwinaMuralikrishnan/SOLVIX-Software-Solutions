@@ -1,6 +1,26 @@
 {
   "contacts": [
     {
+      "id": "REC-329450-0",
+      "created_at": "2026-09-13T06:52:09.450Z",
+      "status": "New",
+      "name": "Audit Tester",
+      "email": "test@solvix.com",
+      "phone": "9876543210",
+      "company": "Audit Corp",
+      "message": "Testing contact submission from automated audit script."
+    },
+    {
+      "id": "REC-306923-0",
+      "created_at": "2026-09-13T06:35:06.923Z",
+      "status": "New",
+      "name": "Sarwina",
+      "email": "sarwinamuralikrishnan07feb@gmail.com",
+      "phone": "9894088401",
+      "company": "M",
+      "message": "I need website for Portfolio"
+    },
+    {
       "id": "REC-544843-0",
       "created_at": "2026-09-13T06:05:44.843Z",
       "status": "New",
@@ -52,6 +72,32 @@
     }
   ],
   "consultations": [
+    {
+      "id": "REC-329859-0",
+      "created_at": "2026-09-13T06:52:09.859Z",
+      "status": "New",
+      "name": "Audit Tester",
+      "email": "test@solvix.com",
+      "phone": "9876543210",
+      "company": "Audit Corp",
+      "meeting_type": "Google Meet",
+      "preferred_date": "2026-09-15",
+      "preferred_time": "10:00 AM IST",
+      "description": "Testing consultation booking from audit script."
+    },
+    {
+      "id": "REC-036805-0",
+      "created_at": "2026-09-13T06:47:16.806Z",
+      "status": "New",
+      "name": "Sarwina Muralikrishnan",
+      "email": "sarwinamuralikrishnan07feb@gmail.com",
+      "phone": "9894088401",
+      "company": "",
+      "meeting_type": "Google Meet",
+      "preferred_date": "2026-09-14",
+      "preferred_time": "10:00 AM IST",
+      "description": "Technical Topic: Pricing Centered CTA "
+    },
     {
       "id": "REC-545947-0",
       "created_at": "2026-09-13T06:05:45.947Z",
@@ -106,6 +152,32 @@
     }
   ],
   "quotes": [
+    {
+      "id": "REC-329715-0",
+      "created_at": "2026-09-13T06:52:09.715Z",
+      "status": "New",
+      "name": "Audit Tester",
+      "email": "test@solvix.com",
+      "phone": "9876543210",
+      "company": "Audit Corp",
+      "service": "Business Website",
+      "budget": "₹25,000 – ₹50,000",
+      "timeline": "2–4 Weeks",
+      "description": "Testing quote submission from automated audit script."
+    },
+    {
+      "id": "REC-524352-0",
+      "created_at": "2026-09-13T06:38:44.352Z",
+      "status": "New",
+      "name": "Sarwina Muralikrishnan",
+      "email": "sarwinamuralikrishnan07feb@gmail.com",
+      "phone": "9894088401",
+      "company": "",
+      "service": "Web Development",
+      "budget": "₹25,000 – ₹50,000",
+      "timeline": "2–4 Weeks",
+      "description": "Website for my personal portfolio"
+    },
     {
       "id": "REC-545648-0",
       "created_at": "2026-09-13T06:05:45.649Z",
@@ -186,6 +258,12 @@
     }
   ],
   "subscribers": [
+    {
+      "id": "REC-330016-0",
+      "created_at": "2026-09-13T06:52:10.016Z",
+      "status": "Active",
+      "email": "newslettertest@solvix.com"
+    },
     {
       "id": "REC-546201-0",
       "created_at": "2026-09-13T06:05:46.201Z",
