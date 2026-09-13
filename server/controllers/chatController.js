@@ -57,6 +57,7 @@ exports.handleChatMessage = async (req, res) => {
     return res.json({
       success: true,
       reply: aiResult.reply,
+      message: aiResult.reply,
       conversationId: aiResult.conversationId || `conv-${Date.now()}`,
     });
   } catch (error) {
