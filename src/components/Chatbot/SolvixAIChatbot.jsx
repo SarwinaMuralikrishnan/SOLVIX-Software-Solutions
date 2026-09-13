@@ -94,7 +94,7 @@ export default function SolvixAIChatbot({ onOpenQuote, onOpenConsultation }) {
     } catch (error) {
       console.error('[CHATBOT ERROR]', error.code || 'UNKNOWN', error.message);
 
-      let userFacingMessage = "SOLVIX AI assistant is temporarily offline. Please use the options below to connect with our team directly.";
+      let userFacingMessage = "Sorry, I'm having trouble responding right now. Please try again in a moment.";
 
       const errorMsg = {
         id: `ai-err-${Date.now()}`,

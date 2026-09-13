@@ -1,50 +1,61 @@
-// SOLVIX AI Service - Official OpenAI Node.js SDK + Natural AI Assistant Engine
+// SOLVIX AI Service - Universal ChatGPT-Like AI Engine
 const { OpenAI } = require("openai");
 const solvixKnowledge = require("../data/solvixKnowledge");
 
 const SYSTEM_PROMPT = `
-You are "SOLVIX AI", the official AI Assistant for SOLVIX Software Solutions (https://www.solvixsoftwaresolutions.com).
+You are "SOLVIX AI", a real, general-purpose AI assistant (similar to ChatGPT) integrated into SOLVIX Software Solutions (https://www.solvixsoftwaresolutions.com).
 
-CORE BEHAVIOR & RESPONSE STYLE:
-- Act like a real, professional AI assistant (similar to ChatGPT).
-- Do NOT behave like a traditional FAQ chatbot. Do NOT limit responses to predefined questions or keywords.
-- Answer the customer's actual question first.
-- Every response must be: Professional, Simple, Clear, Natural, Friendly, Helpful, Concise, and Easy to understand.
-- Do NOT use unnecessarily complicated technical terminology.
-- Do NOT give extremely long answers unless the customer specifically asks for detailed information.
-- Do NOT sound robotic or repeatedly promote SOLVIX.
+MAIN BEHAVIOR & CAPABILITIES:
+1. GENERAL-PURPOSE AI:
+   - You are a fully capable AI assistant. Answer general knowledge, technical, business, programming, writing, brainstorming, and everyday questions (e.g., "What is AI?", "Explain machine learning", "What is Python?", "React vs Angular", "Help me write an email", "Give me a business idea", "How does an API work?").
+   - NEVER say "I can only answer questions about SOLVIX."
+   - If a customer asks a general question, answer it clearly and directly.
 
-RANDOM, INVALID & UNKNOWN INPUT HANDLING RULES:
-1. COMPLETELY RANDOM / GIBBERISH TEXT (e.g. "setxrctuvhbjnl", "asdfghjkl", "xyz123abc", "qwertyuiop", "hdjskfhskdjfh", "123456789xyz"):
-   - DO NOT invent a meaning or generate a fake answer.
-   - Respond naturally and politely: "I’m not sure what you mean by \`[input]\`. Could you please rephrase your question?" (or "I’m not sure what you mean by that. Could you please rephrase your question?").
+2. SOLVIX-SPECIFIC KNOWLEDGE & VERIFIED FACTS:
+   - Company: SOLVIX Software Solutions is a software services startup based in Coimbatore, Tamil Nadu, India. Business hours: 9:00 AM – 6:00 PM IST.
+   - Verified Services: Website Development, Web Application Development, Mobile App Development, Flutter Development, UI/UX Design, AI/ML Solutions, AI Chatbots, AI Support Solutions, AI Automation, AI Document Processing, CRM Development, ERP Development, API Development and Integration, Software Consulting, Maintenance and Support.
+   - Real Featured Projects:
+     * SimPill (Smart medication tracking and healthcare management system)
+     * ZenMed (Comprehensive healthcare and clinic management platform)
+     * Telemedicine Platform (Secure video consultation and digital prescription portal)
+     * Petition Response Engine (Automated document analysis and legal petition response system)
+   - Verified Starting Base Pricing (MUST use these exact base numbers):
+     * Business Website — ₹20,000
+     * Corporate Website — ₹40,000
+     * E-Commerce — ₹75,000
+     * Marketplace — ₹2,50,000
+     * Android App — ₹1,20,000
+     * iOS App — ₹1,50,000
+     * Flutter App — ₹2,00,000
+     * AI Chatbot — ₹60,000
+     * AI Support — ₹1,20,000
+     * AI Automation — ₹2,00,000
+     * AI Document Processing — ₹2,50,000
+     * CRM — ₹2,00,000
+     * ERP — ₹5,00,000
+   - Always state that final pricing depends on project scope, features, and requirements. Never invent additional pricing, clients, awards, or fake testimonials. If information is unavailable, say: "I don't have that specific information available right now."
 
-2. TYPOGRAPHICAL ERRORS (e.g. "What is Javascrpt?", "Tell me about machne lerning"):
-   - If confidence is high, suggest the likely correction: "Do you mean JavaScript? If so, JavaScript is a programming language commonly used to make websites interactive."
-   - Do NOT force an interpretation when text is ambiguous.
+3. CONVERSATION CONTEXT & PRONOUN RESOLUTION:
+   - Understand follow-up context across turns. If the user asks "Can you build one?" or "How much?" or "price evlo?", resolve "one", "it", "this", "that" from recent messages (e.g. if previous message discussed CRM, know they mean CRM).
 
-3. UNKNOWN TERMS / UNRECOGNIZED ENTITIES:
-   - If the user provides a real-looking term or product name that you do not recognize with sufficient confidence, do NOT hallucinate.
-   - Reply: "I’m not familiar with that term. Could you provide a little more context?"
+4. TANGLISH / MIXED LANGUAGE & INFORMAL INPUT:
+   - Understand Indian English, Tamil keywords, and Tanglish naturally (e.g. "CRM na enna?", "price evlo?", "enaku ecommerce website venum", "CRM pathi sollu", "website venum"). Answer clearly in simple, friendly English.
 
-4. RANDOM TEXT MIXED WITH A REAL QUESTION (e.g. "asdfgh what is CRM xyz123"):
-   - Ignore the irrelevant random characters and answer the meaningful question directly.
+5. TYPOS & SPELLING MISTAKES:
+   - Tolerantly understand typos ("machne learning", "javscript", "ecomerce website", "chat bot"). Answer naturally without unnecessarily pointing out spelling errors.
 
-5. EMPTY OR NEARLY EMPTY MESSAGES (e.g. ".", "...", "?", "???", "hi", "hello"):
-   - Respond naturally without showing an error: "Hi! 👋 How can I help you today?"
+6. RANDOM & GIBBERISH INPUT:
+   - Meaningless gibberish (e.g. "setxrctuvhbjnl", "asdfghjkl") -> Respond politely: "I'm not sure what you mean. Could you rephrase that?"
+   - Mixed random text + real question (e.g. "asdfgh what is CRM xyz123") -> extract the meaningful question and answer it.
 
-6. ACCURACY > GUESSING:
-   - NEVER create an answer just because the user entered something. If there is no reliable meaning, politely ask the user to rephrase. Never use harsh words like "Invalid input!" or "Error!".
+7. COMPLEX & MULTI-PART QUESTIONS:
+   - Answer all parts of complex multi-part questions clearly and comprehensively.
 
-GENERAL QUESTIONS & SOLVIX FACTS:
-- For general non-SOLVIX questions (e.g. "What is CRM?", "What is SaaS?", "What is ERP?", "What is machine learning?"), answer clearly and naturally without forcing the conversation to SOLVIX.
-- For SOLVIX-specific queries, use ONLY verified facts:
-  * Headquarters: Coimbatore, Tamil Nadu, India.
-  * Founders & Leadership: Manjith (CEO & Founder), Subetha V (Founder & CTO), Sarwina M (Co-Founder & Technical Lead).
-  * Services: Web & Web App Development, Mobile Apps (Android, iOS, Flutter/Dart), AI/ML Solutions, AI Automation, Custom CRM, ERP, UI/UX Design, API Integration.
-  * Starting Base Prices: Website Development starting ₹12,000–₹25,000 (Corporate: ₹25,000–₹80,000), E-Commerce starting ₹75,000, Custom CRM starting ₹2,00,000, ERP starting ₹4,50,000, Mobile Apps starting ₹80,000, AI Chatbots starting ₹75,000.
-  * Explain that final cost depends on specific features, scope, and requirements.
-  * NEVER invent clients, awards, testimonials, revenue, employee numbers, fake projects, or unsupported prices. If unavailable, say: "I don't have that specific information available right now. You can contact the Solvix team for confirmation."
+8. RESPONSE STYLE & TONE:
+   - Professional, simple, clear, natural, friendly, and helpful.
+   - Use short paragraphs and bullet points where useful.
+   - Avoid robotic phrases ("As an AI language model...", "I am just a chatbot...").
+   - When a user shows genuine interest in a SOLVIX service, naturally suggest: "If you'd like, you can use the Request a Quote option to share your requirements with the SOLVIX team."
 `;
 
 /**
@@ -53,6 +64,10 @@ GENERAL QUESTIONS & SOLVIX FACTS:
 function isGibberish(str) {
   const text = (str || "").trim();
   if (text.length < 4) return false;
+
+  const techTerms = ["crm", "erp", "saas", "website", "app", "solvix", "flutter", "react", "python", "ai", "ml", "api", "clothing"];
+  const containsTech = techTerms.some(term => text.toLowerCase().includes(term));
+  if (containsTech) return false;
 
   // Multi-word keyboard mashes
   if (text.includes(" ")) {
@@ -84,11 +99,11 @@ function isGibberish(str) {
 /**
  * Smart Knowledge Engine Fallback for offline or key-unconfigured environments
  */
-function generateLocalKnowledgeResponse(message, context = {}) {
+function generateLocalKnowledgeResponse(message, conversation = [], context = {}) {
   const rawText = (message || "").trim();
   const query = rawText.toLowerCase();
 
-  // Rule 5: Empty, punctuation, or simple greetings
+  // 1. Empty, punctuation, or simple greetings
   if (
     !rawText ||
     rawText === "." ||
@@ -101,145 +116,186 @@ function generateLocalKnowledgeResponse(message, context = {}) {
     query.startsWith("hi ") ||
     query.startsWith("hello ")
   ) {
-    return "Hi! 👋 How can I help you today?";
+    return "Hi! 👋 I'm the SOLVIX AI Assistant. I can help you with SOLVIX services, pricing, projects, technical questions, business questions, or general questions. How can I help you today?";
   }
 
-  // Rule 4: Mixed random text + meaningful question extraction
-  let cleanQuery = query;
-  if (query.includes("what is crm") || query.includes("crm")) {
-    cleanQuery = "what is crm";
-  } else if (query.includes("what is erp") || query.includes("erp")) {
-    cleanQuery = "what is erp";
-  } else if (query.includes("what is saas") || query.includes("saas")) {
-    cleanQuery = "what is saas";
-  } else if (query.includes("machine learning") || query.includes("machne lerning")) {
-    cleanQuery = "what is machine learning";
-  } else if (query.includes("javascrpt") || query.includes("javascript")) {
-    cleanQuery = "javascrpt";
+  // 2. Gibberish check
+  if (isGibberish(rawText)) {
+    return "I'm not sure what you mean. Could you rephrase that?";
   }
 
-  // Rule 1: Completely Random / Gibberish Text
-  if (
-    isGibberish(rawText) &&
-    !query.includes("crm") &&
-    !query.includes("erp") &&
-    !query.includes("saas") &&
-    !query.includes("website") &&
-    !query.includes("app")
-  ) {
-    return `I’m not sure what you mean by \`${rawText}\`. Could you please rephrase your question?`;
+  // Extract last context topic from conversation history if available
+  let lastTopic = "";
+  if (Array.isArray(conversation) && conversation.length > 0) {
+    const userAndAiMsgs = conversation.map(m => (m.content || m.text || "").toLowerCase()).join(" ");
+    if (userAndAiMsgs.includes("crm")) lastTopic = "crm";
+    else if (userAndAiMsgs.includes("erp")) lastTopic = "erp";
+    else if (userAndAiMsgs.includes("e-commerce") || userAndAiMsgs.includes("ecommerce") || userAndAiMsgs.includes("clothing") || userAndAiMsgs.includes("website")) lastTopic = "ecommerce";
+    else if (userAndAiMsgs.includes("flutter")) lastTopic = "flutter";
+    else if (userAndAiMsgs.includes("app")) lastTopic = "app";
+    else if (userAndAiMsgs.includes("chatbot") || userAndAiMsgs.includes("ai support")) lastTopic = "chatbot";
   }
 
-  // Rule 2: Typographical Errors
-  if (cleanQuery.includes("javascrpt")) {
-    return "Do you mean JavaScript? If so, JavaScript is a programming language commonly used to make websites interactive.";
-  }
-  if (query.includes("machne lerning") || query.includes("machin lerning")) {
-    return "Do you mean machine learning? Machine learning is a branch of AI where systems learn patterns from data to make predictions or decisions.";
+  // 3. Pronoun / Follow-up resolution ("how much?", "price evlo?", "can you build one?", "how much is it?")
+  const isPriceQuery = query.includes("how much") || query.includes("price") || query.includes("cost") || query.includes("evlo") || query.includes("charge");
+  const isCanYouBuild = query.includes("can you build") || query.includes("can you make") || query.includes("can you develop") || query.includes("pannanum");
+  const isWebsiteReq = query.includes("website") || query.includes("site");
+  const isAppReq = query.includes("app") || query.includes("mobile");
+
+  if (isPriceQuery && (query === "how much" || query === "how much?" || query.includes("price evlo") || query.includes("how much is it") || query === "price" || query === "cost")) {
+    if (lastTopic === "crm") {
+      return "Our current base price for CRM development is ₹2,00,000. Final pricing depends on project scope, features, and requirements.";
+    } else if (lastTopic === "erp") {
+      return "Our current base price for ERP development is ₹5,00,000. Final pricing depends on project scope, modules, and requirements.";
+    } else if (lastTopic === "ecommerce") {
+      return "The current base price for an E-Commerce website is ₹75,000, while a Marketplace starts at ₹2,50,000. Final cost depends on specific features and integrations.";
+    } else if (lastTopic === "website") {
+      return "Our base pricing for website development is: Business Website at ₹20,000 and Corporate Website at ₹40,000. Final pricing depends on project scope.";
+    } else if (lastTopic === "app") {
+      return "Our starting base prices for mobile app development are: Android App at ₹1,20,000, iOS App at ₹1,50,000, and Flutter App at ₹2,00,000.";
+    } else if (lastTopic === "chatbot") {
+      return "Our starting base price for an AI Chatbot is ₹60,000, and AI Customer Support System is ₹1,20,000.";
+    }
   }
 
-  // Rule 3: General Knowledge Definitions
-  if (cleanQuery.includes("what is crm")) {
-    return "CRM stands for Customer Relationship Management. It is software used to manage customers, leads, sales, follow-ups, and communication in one place.";
-  }
-  if (cleanQuery.includes("what is erp")) {
-    return "ERP stands for Enterprise Resource Planning. It helps businesses manage areas such as finance, inventory, purchasing, employees, projects, and operations in one system.";
-  }
-  if (cleanQuery.includes("what is saas")) {
-    return "SaaS stands for Software as a Service. It is software that customers access online, usually through a subscription.";
-  }
-  if (cleanQuery.includes("what is machine learning")) {
-    return "Machine learning is a branch of artificial intelligence where computers learn from data to identify patterns and make decisions without being explicitly programmed.";
-  }
-  if (query.includes("what is ai") || query === "ai") {
-    return "Artificial Intelligence (AI) refers to computer systems designed to perform tasks that typically require human intelligence, such as understanding language, analyzing data, and making decisions.";
+  if (isCanYouBuild && (query.includes("one") || query.includes("it") || query.includes("that"))) {
+    if (lastTopic === "crm") {
+      return "Yes. SOLVIX can develop a custom CRM based on your business requirements, including lead tracking, sales pipelines, customer management, and analytics dashboards.";
+    } else if (lastTopic === "erp") {
+      return "Yes. SOLVIX can build a full-scale ERP platform covering finance, inventory, HR, purchasing, and operations.";
+    } else if (lastTopic === "website" || lastTopic === "ecommerce") {
+      return "Yes. SOLVIX can develop custom websites and e-commerce platforms tailored to your business.";
+    }
   }
 
-  // Customer Service Intents
-  if (query.includes("need a website") || query.includes("want a website") || query.includes("build website")) {
-    return "Sure. Solvix can help you build a website based on your business requirements. If you tell me what type of business you have and what you need the website to do, I can help you understand the suitable option.";
-  }
-  if (query.includes("need an app") || query.includes("need app") || query.includes("want an app") || query.includes("build app")) {
-    return "Absolutely. Solvix can develop custom mobile applications. We can help with Android, iOS, or cross-platform solutions such as Flutter. Tell me what your app should do, and I can guide you.";
-  }
-  if (query.includes("can you build crm") || query.includes("build crm") || query.includes("need crm")) {
-    return "Yes. Solvix can develop a custom CRM based on your business requirements, including leads, customers, sales, follow-ups, dashboards, and other features.";
+  // Hospital CRM Multi-part query
+  if (query.includes("hospital") && query.includes("crm")) {
+    return "Yes, SOLVIX can build a custom CRM for a hospital. Recommended features include patient record management, appointment scheduling, doctor availability tracking, billing integration, and medical history access. Our starting base price for custom CRM development is ₹2,00,000, with final cost depending on specific requirements.";
   }
 
-  // Sales Conversation
-  if (
-    query.includes("e-commerce") &&
-    (query.includes("clothing") || query.includes("store") || query.includes("shop") || query.includes("business"))
-  ) {
-    return "That sounds great. Solvix can build a custom e-commerce website for your clothing business, including product management, customer accounts, cart, checkout, payment integration, and other required features. If you share a few details about your requirements, we can help you with a suitable quotation.";
+  // 4. Tanglish / Intent Matching
+  // Clothing business context
+  if (query.includes("clothing")) {
+    return "A business or e-commerce website could be suitable for a clothing business. If you want customers to browse products, manage inventory, and place orders online, an e-commerce website is the ideal choice. SOLVIX base pricing for E-Commerce starts at ₹75,000.";
   }
 
-  // Pricing Questions
-  if (
-    query.includes("e-commerce") &&
-    (query.includes("cost") || query.includes("price") || query.includes("how much") || query.includes("charge") || query.includes("pricing"))
-  ) {
-    return "The current base price for an e-commerce website is ₹75,000. The final cost depends on features, integrations, design, payment gateway requirements, and overall project scope.";
-  }
-  if (
-    (query.includes("crm") || query.includes("customer relationship")) &&
-    (query.includes("cost") || query.includes("price") || query.includes("how much") || query.includes("charge") || query.includes("pricing") || query === "crm cost" || query === "crm price")
-  ) {
-    return "Our current base price for a CRM solution is ₹2,00,000. The final cost depends on the features, number of users, integrations, customization, and project requirements.";
-  }
-  if (query.includes("price") || query.includes("cost") || query.includes("budget") || query.includes("pricing") || query.includes("how much")) {
-    return "Here is a quick overview of our starting base prices:\n\n• **Website Development:** Starting from ₹12,000 – ₹25,000\n• **E-Commerce Website:** Base starting at ₹75,000\n• **Mobile App (Android / iOS / Flutter):** Base starting at ₹80,000\n• **Custom CRM Solution:** Base starting at ₹2,00,000\n• **ERP Platform:** Base starting at ₹4,50,000\n\nThe final price depends on your specific project requirements and scope.";
+  // CRM
+  if (query.includes("crm")) {
+    if (isPriceQuery) {
+      return "Our current base price for CRM development is ₹2,00,000. Final pricing depends on project scope, features, and user seats.";
+    }
+    if (isCanYouBuild || query.includes("need crm") || query.includes("build crm") || query.includes("want crm")) {
+      return "Yes. SOLVIX can develop a custom CRM tailored to your workflow, including lead tracking, customer communication, sales pipelines, and reporting dashboards.";
+    }
+    return "CRM stands for Customer Relationship Management. It is software used to manage customers, leads, sales, follow-ups, and business communication in one place.";
   }
 
-  // SOLVIX Facts
-  if (
-    query.includes("founder") ||
-    query.includes("ceo") ||
-    query.includes("cto") ||
-    query.includes("team") ||
-    query.includes("who owns") ||
-    query.includes("leadership") ||
-    query.includes("manjith") ||
-    query.includes("subetha") ||
-    query.includes("sarwina")
-  ) {
-    return "The Solvix leadership team includes **Manjith** (CEO & Founder), **Subetha V** (Founder & CTO), and **Sarwina M** (Co-Founder & Technical Lead).";
-  }
-  if (
-    query.includes("contact") ||
-    query.includes("phone") ||
-    query.includes("email") ||
-    query.includes("address") ||
-    query.includes("location") ||
-    query.includes("coimbatore") ||
-    query.includes("reach") ||
-    query.includes("whatsapp")
-  ) {
-    return "Solvix is headquartered in **Coimbatore, Tamil Nadu, India**.\n\n• **Phone / WhatsApp:** +91 76394 10944 / +91 98940 88401\n• **Email:** sarwinamuralikrishnan@gmail.com | subetha076@gmail.com";
-  }
-  if (query.includes("service") || query.includes("what do you do") || query.includes("provide")) {
-    return "Solvix provides website and web application development, mobile applications, AI/ML solutions, AI automation, CRM, ERP, UI/UX design, API integration, and other software solutions.";
+  // ERP
+  if (query.includes("erp")) {
+    if (isPriceQuery) {
+      return "Our current base price for an ERP system is ₹5,00,000. Final cost depends on modules, user roles, and customization requirements.";
+    }
+    return "ERP stands for Enterprise Resource Planning. It helps businesses manage core operations such as finance, inventory, purchasing, HR, and project management in one unified system.";
   }
 
-  // Unclear Software Inquiry
-  if (query === "i need software" || query === "software" || query === "need software") {
-    return "Sure. What kind of software are you looking for—CRM, ERP, website, mobile app, AI solution, or something else?";
+  // SaaS
+  if (query.includes("saas")) {
+    return "SaaS stands for Software as a Service. It is software hosted in the cloud and accessed by users online, typically through a recurring subscription.";
   }
 
-  // Default Natural Response
-  return "I’m not sure what you mean. Could you please rephrase your question?";
+  // Python
+  if (query.includes("python")) {
+    return "Python is a high-level, general-purpose programming language known for its clear syntax and readability. It is widely used in web development, data science, artificial intelligence, machine learning, and automation.";
+  }
+
+  // API
+  if (query.includes("api")) {
+    return "API stands for Application Programming Interface. It is a set of defined rules that allows different software applications to communicate, exchange data, and integrate seamlessly with each other.";
+  }
+
+  // Business Idea
+  if (query.includes("business idea") || query.includes("give me an idea")) {
+    return "Here are a few promising software business ideas:\n1. Custom AI customer support agents for local SMBs.\n2. Niche CRM tailored for healthcare or education providers.\n3. SaaS automated document extraction and invoice processing platform.";
+  }
+
+  // Services Inquiry
+  if (query.includes("services") || query.includes("service") || query.includes("provide") || query.includes("offer")) {
+    return "SOLVIX provides 15 core software services:\n• Website & Web Application Development\n• Mobile App Development (Android, iOS, Flutter)\n• Custom AI/ML Solutions (AI Chatbots, Support, Automation, Document Processing)\n• Business Systems (CRM & ERP Development)\n• UI/UX Design, API Integration, Consulting & Maintenance";
+  }
+
+  // Machine Learning / AI
+  if (query.includes("machine learning") || query.includes("machne lerning") || query.includes("machin lerning") || query.includes("machne")) {
+    return "Do you mean machine learning? Machine learning is a branch of artificial intelligence where computers learn patterns from data to make predictions or decisions without explicit programming.";
+  }
+  if (query.includes("what is ai") || query === "ai" || query.includes("explain ai")) {
+    return "Artificial Intelligence (AI) refers to computer systems engineered to simulate human intelligence—such as understanding natural language, recognizing patterns, solving complex problems, and making data-driven decisions.";
+  }
+
+  // JavaScript Typo
+  if (query.includes("javascrpt") || query.includes("javscript")) {
+    return "Do you mean JavaScript? JavaScript is a programming language widely used to create interactive dynamic content on modern web and mobile applications.";
+  }
+
+  // React vs Angular
+  if (query.includes("react") && query.includes("angular")) {
+    return "React is a flexible UI component library developed by Meta focusing on virtual DOM rendering, whereas Angular is a full-fledged TypeScript framework developed by Google with built-in state management, routing, and dependency injection.";
+  }
+
+  // E-Commerce
+  if (query.includes("e-commerce") || query.includes("ecommerce") || query.includes("ecomerce")) {
+    if (isPriceQuery) {
+      return "Our base pricing for an E-Commerce Website is ₹75,000, while a Multi-Vendor Marketplace starts at ₹2,50,000. Final pricing depends on project scope, payment integrations, and design complexity.";
+    }
+    return "SOLVIX provides custom E-Commerce solutions with secure payment gateways, cart management, inventory tracking, customer accounts, and order management dashboards.";
+  }
+
+  // General Website Queries
+  if (isWebsiteReq) {
+    if (query.includes("business")) return "Our base price for a Business Website is ₹20,000. It includes responsive design, CMS, and contact integration.";
+    if (query.includes("corporate")) return "Our base price for a Corporate Website is ₹40,000. It includes custom enterprise layouts and CMS integration.";
+    if (isPriceQuery) {
+      return "Here is our base pricing for Website Development:\n• **Business Website:** ₹20,000\n• **Corporate Website:** ₹40,000\n• **E-Commerce Website:** ₹75,000\n• **Marketplace:** ₹2,50,000\n\nFinal cost depends on your exact project requirements.";
+    }
+    return "SOLVIX builds responsive, fast websites tailored to your business requirements. What type of website are you looking for—business, corporate, or e-commerce?";
+  }
+
+  // Mobile App Queries
+  if (isAppReq) {
+    if (isPriceQuery) {
+      return "Here is our base pricing for Mobile App Development:\n• **Android App:** ₹1,20,000\n• **iOS App:** ₹1,50,000\n• **Flutter App (Android + iOS):** ₹2,00,000\n\nFinal pricing depends on app features and backend requirements.";
+    }
+    if (query.includes("flutter")) return "SOLVIX develops cross-platform Flutter mobile applications for both Android & iOS. Starting base price is ₹2,00,000.";
+    if (query.includes("android")) return "Our starting base price for a native Android application is ₹1,20,000.";
+    if (query.includes("ios")) return "Our starting base price for a native iOS application is ₹1,50,000.";
+    return "SOLVIX develops native Android/iOS and cross-platform Flutter mobile apps. What features do you need in your app?";
+  }
+
+  // Real Projects Inquiry
+  if (query.includes("project") || query.includes("portfolio") || query.includes("work") || query.includes("simpill") || query.includes("zenmed")) {
+    return "Here are some of SOLVIX's featured real projects:\n\n• **SimPill:** Smart medication tracking and healthcare management system.\n• **ZenMed:** Comprehensive healthcare and clinic management platform.\n• **Telemedicine Platform:** Secure video consultation and digital prescription portal.\n• **Petition Response Engine:** Automated document analysis and legal petition response system.";
+  }
+
+  // SOLVIX Details & Hours
+  if (query.includes("solvix") || query.includes("company") || query.includes("about")) {
+    return "SOLVIX Software Solutions is a software services startup based in Coimbatore, Tamil Nadu, India.\n\n• **Business Hours:** 9:00 AM – 6:00 PM IST (Mon–Sat)\n• **Services:** Web & App Development, AI/ML Solutions, AI Chatbots, Custom CRM, ERP, API Integration, Software Consulting, UI/UX Design.\n• **Location:** Coimbatore, Tamil Nadu, India";
+  }
+
+  // Default Fallback
+  return "I'm not sure what you mean. Could you please rephrase your question?";
 }
 
 /**
- * Generate AI Chat Response using official OpenAI SDK or Smart Knowledge Fallback
+ * Generate AI Chat Response using configured LLM provider (OpenAI / custom endpoint) or local fallback
  */
 async function generateChatResponse(message, conversation = [], context = {}) {
-  const apiKey = process.env.OPENAI_API_KEY;
+  const apiKey = process.env.LLM_API_KEY || process.env.OPENAI_API_KEY;
+  const model = process.env.LLM_MODEL || "gpt-4o-mini";
+  const baseURL = process.env.LLM_BASE_URL || undefined;
 
-  // If OpenAI API key is missing or unconfigured, use Smart Knowledge Engine
+  // Check if API key is valid
   if (!apiKey || apiKey.trim() === "" || apiKey === "your_openai_api_key_here") {
     console.log("[CHAT] Using SOLVIX Natural Knowledge Engine (Local Fallback)");
-    const reply = generateLocalKnowledgeResponse(message, context);
+    const reply = generateLocalKnowledgeResponse(message, conversation, context);
     return {
       success: true,
       reply,
@@ -248,7 +304,12 @@ async function generateChatResponse(message, conversation = [], context = {}) {
   }
 
   try {
-    const openai = new OpenAI({ apiKey });
+    const openaiOptions = { apiKey: apiKey.trim() };
+    if (baseURL && baseURL.trim() !== "") {
+      openaiOptions.baseURL = baseURL.trim();
+    }
+
+    const openai = new OpenAI(openaiOptions);
 
     const formattedHistory = (conversation || [])
       .slice(-10)
@@ -265,13 +326,13 @@ async function generateChatResponse(message, conversation = [], context = {}) {
     ];
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model,
       messages,
-      max_tokens: 600,
+      max_tokens: 700,
       temperature: 0.7,
     });
 
-    const reply = completion.choices?.[0]?.message?.content || generateLocalKnowledgeResponse(message, context);
+    const reply = completion.choices?.[0]?.message?.content || generateLocalKnowledgeResponse(message, conversation, context);
 
     return {
       success: true,
@@ -279,8 +340,8 @@ async function generateChatResponse(message, conversation = [], context = {}) {
       conversationId: `conv-${Date.now()}`,
     };
   } catch (error) {
-    console.warn("[CHAT] OpenAI API error occurred, falling back to SOLVIX Knowledge Engine:", error.message);
-    const reply = generateLocalKnowledgeResponse(message, context);
+    console.warn("[CHAT] LLM API error occurred, falling back to local engine:", error.message);
+    const reply = generateLocalKnowledgeResponse(message, conversation, context);
     return {
       success: true,
       reply,
@@ -291,4 +352,5 @@ async function generateChatResponse(message, conversation = [], context = {}) {
 
 module.exports = {
   generateChatResponse,
+  generateLocalKnowledgeResponse,
 };

@@ -4,65 +4,60 @@ const solvixKnowledge = {
   company: {
     name: "SOLVIX Software Solutions",
     tagline: "Build. Innovate. Scale.",
-    mission: "Empowering businesses with modern, scalable, and cutting-edge software solutions.",
+    description: "SOLVIX is a software services startup based in Coimbatore, Tamil Nadu, India.",
     headquarters: "Coimbatore, Tamil Nadu, India",
-    founders: [
-      { name: "Sarwina M", role: "Co-Founder & CEO / Technical Lead", email: "sarwinamuralikrishnan@gmail.com" },
-      { name: "Subetha V", role: "Co-Founder & CTO / Solutions Architect", email: "subetha076@gmail.com" },
-    ],
+    businessHours: "9:00 AM – 6:00 PM IST",
     contact: {
       phone: "+91 98765 43210",
       email: "sarwinamuralikrishnan@gmail.com",
       altEmail: "subetha076@gmail.com",
-      hours: "Monday – Saturday: 9:00 AM – 7:00 PM IST",
-      support: "24/7 Priority Emergency Support Available",
+      hours: "9:00 AM – 6:00 PM IST",
     },
     website: "https://www.solvixsoftwaresolutions.com",
   },
 
   services: [
-    {
-      category: "Web Development",
-      description: "Responsive, ultra-fast websites, web applications, and landing pages tailored for business growth.",
-      items: [
-        { name: "Landing Page", range: "₹12,000 – ₹18,000", timeline: "1–2 Weeks", desc: "High-converting single page website with contact form." },
-        { name: "Portfolio Website", range: "₹18,000 – ₹25,000", timeline: "1–2 Weeks", desc: "Professional showcase website for individuals & agencies." },
-        { name: "Business Website", range: "₹25,000 – ₹45,000", timeline: "2–3 Weeks", desc: "Multi-page corporate website with CMS and enquiry integration." },
-        { name: "Corporate Website", range: "₹45,000 – ₹80,000", timeline: "3–4 Weeks", desc: "Advanced enterprise web portal with custom features." },
-        { name: "E-Commerce Website", range: "₹80,000 – ₹1,50,000", timeline: "4–6 Weeks", desc: "Full online store with payment gateway, order tracking, admin dashboard." },
-        { name: "Multi-Vendor Marketplace", range: "₹2,50,000+", timeline: "8–12 Weeks", desc: "Scalable marketplace connecting buyers and multiple sellers." },
-      ],
-    },
-    {
-      category: "Mobile App Development",
-      description: "Native and cross-platform iOS & Android mobile applications built for high performance.",
-      items: [
-        { name: "Android App", range: "₹80,000 – ₹1,20,000", timeline: "4–6 Weeks", desc: "Native Android application published on Google Play Store." },
-        { name: "iOS App", range: "₹1,00,000 – ₹1,50,000", timeline: "4–6 Weeks", desc: "Native iOS app published on Apple App Store." },
-        { name: "Flutter App (Android + iOS)", range: "₹1,50,000 – ₹2,50,000", timeline: "6–8 Weeks", desc: "Cross-platform app running seamlessly on both Android & iOS." },
-      ],
-    },
-    {
-      category: "AI Solutions",
-      description: "Custom AI model integration, intelligent chatbots, customer support automation, and document extraction.",
-      items: [
-        { name: "AI Chatbot", range: "₹75,000 – ₹1,20,000", timeline: "2–4 Weeks", desc: "Intelligent customer service & lead generation AI assistant." },
-        { name: "AI Customer Support System", range: "₹1,50,000 – ₹2,50,000", timeline: "4–6 Weeks", desc: "Automated ticket handling, rag knowledge search, multi-channel support." },
-        { name: "AI Automation Workflow", range: "₹2,00,000 – ₹3,50,000", timeline: "6–8 Weeks", desc: "Automated document OCR, data pipeline, and AI-driven reporting." },
-        { name: "AI Document Processing", range: "₹2,50,000+", timeline: "6–10 Weeks", desc: "Extract structured analytics from unstructured PDFs, invoices, and contracts." },
-      ],
-    },
-    {
-      category: "Business Software",
-      description: "Custom CRM, ERP, inventory management, HR portal, and business workflow software.",
-      items: [
-        { name: "CRM Software", range: "₹1,80,000 – ₹3,00,000", timeline: "6–8 Weeks", desc: "Customer relationship management system with lead tracking & pipeline." },
-        { name: "ERP Platform", range: "₹4,50,000+", timeline: "10–14 Weeks", desc: "Enterprise resource planning suite covering finance, HR, inventory, operations." },
-        { name: "Inventory Management", range: "₹1,20,000 – ₹2,00,000", timeline: "4–6 Weeks", desc: "Real-time stock tracking, purchase orders, barcode scanning." },
-        { name: "HR & Payroll System", range: "₹1,75,000 – ₹2,80,000", timeline: "6–8 Weeks", desc: "Employee attendance, leave management, automated payroll processing." },
-      ],
-    },
+    "Website Development",
+    "Web Application Development",
+    "Mobile App Development",
+    "Flutter Development",
+    "UI/UX Design",
+    "AI/ML Solutions",
+    "AI Chatbots",
+    "AI Support Solutions",
+    "AI Automation",
+    "AI Document Processing",
+    "CRM Development",
+    "ERP Development",
+    "API Development and Integration",
+    "Software Consulting",
+    "Maintenance and Support",
   ],
+
+  realProjects: [
+    { name: "SimPill", desc: "Smart medication tracking and healthcare management system." },
+    { name: "ZenMed", desc: "Comprehensive healthcare and clinic management platform." },
+    { name: "Telemedicine Platform", desc: "Secure video consultation and digital prescription portal." },
+    { name: "Petition Response Engine", desc: "Automated document analysis and legal petition response system." },
+  ],
+
+  basePricing: {
+    "Business Website": "₹20,000",
+    "Corporate Website": "₹40,000",
+    "E-Commerce": "₹75,000",
+    "Marketplace": "₹2,50,000",
+    "Android App": "₹1,20,000",
+    "iOS App": "₹1,50,000",
+    "Flutter App": "₹2,00,000",
+    "AI Chatbot": "₹60,000",
+    "AI Support": "₹1,20,000",
+    "AI Automation": "₹2,00,000",
+    "AI Document Processing": "₹2,50,000",
+    "CRM": "₹2,00,000",
+    "ERP": "₹5,00,000",
+  },
+
+  pricingNotice: "Always note that final pricing depends on project scope and requirements.",
 
   technologies: {
     frontend: ["React.js", "Vite", "Tailwind CSS", "Framer Motion", "TypeScript", "HTML5/CSS3"],
@@ -71,16 +66,7 @@ const solvixKnowledge = {
     database: ["Supabase", "PostgreSQL", "MySQL", "SQLite", "MongoDB", "Redis"],
     ai_ml: ["OpenAI API", "LangChain", "Python OpenCV / MediaPipe", "PyTorch", "NLP"],
     cloud: ["AWS", "Vercel", "Render", "Docker", "Nginx", "Git / GitHub"],
-  },
-
-  process: [
-    { step: 1, name: "IDEA & DISCOVERY", desc: "Understand business goals, target audience, technical scope, and project feasibility." },
-    { step: 2, name: "REQUIREMENT PLANNING", desc: "Wireframing, architecture blueprinting, tech stack selection, and milestone scheduling." },
-    { step: 3, name: "DESIGN & UI/UX", desc: "Crafting intuitive, responsive prototype designs aligned with your brand identity." },
-    { step: 4, name: "AGILE DEVELOPMENT", desc: "Clean modular code development with weekly client sprint reviews and progress demos." },
-    { step: 5, name: "TESTING & QA", desc: "Rigorous security audits, load testing, cross-browser compatibility, and bug fixing." },
-    { step: 6, name: "DEPLOYMENT & LAUNCH", desc: "Production launch, domain setup, SSL security, admin training, and 3 months free support." },
-  ]
+  }
 };
 
 module.exports = solvixKnowledge;
