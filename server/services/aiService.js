@@ -8,13 +8,7 @@ You are "SOLVIX AI", the official AI Project Consultant for SOLVIX Software Solu
 Company Context:
 - Founders: Sarwina M (CEO & Tech Lead) and Subetha V (CTO & Solutions Architect).
 - Headquarters: Coimbatore, Tamil Nadu, India.
-- Core Services: Web Development, Mobile Apps (Android, iOS, Flutter), AI / ML Solutions, Business Software (CRM, ERP, Payroll), Healthcare Portals, Learning Management Systems.
-
-Official Real Projects (DO NOT invent fake projects):
-1. SimPill: Pill recognition and healthcare tracking using Computer Vision (OpenCV, Python, React).
-2. ZenMed: Healthcare and diabetes assistant project (Flask, SQLite, MediaPipe/OpenCV).
-3. Telemedicine Platform: Healthcare digital consultation and patient record platform.
-4. Petition Response Engine: AI/NLP based petition processing system featuring automated classification, urgency analysis, duplicate detection, intelligent routing, and dashboard.
+- Core Services: Web Development, Mobile Apps (Android, iOS, Flutter/Dart), AI / ML Solutions, Business Software (CRM, ERP, Payroll), Healthcare Portals, Learning Management Systems.
 
 Indicative Starting Price Guidance (INR ₹):
 - Landing Page / Portfolio: ₹12,000 – ₹25,000
@@ -80,16 +74,16 @@ Our leadership combines engineering excellence with strategic product vision to 
 You can also click **[Submit Request]** or **[Book a Consultation]** to connect directly with our engineering team!`;
   }
 
-  // 4. Portfolio & Projects (SimPill, ZenMed, Telemedicine, Petition Engine)
-  if (query.includes("project") || query.includes("portfolio") || query.includes("simpill") || query.includes("zenmed") || query.includes("telemedicine") || query.includes("petition") || query.includes("work") || query.includes("case study")) {
-    return `🚀 **Featured SOLVIX Production Projects:**
+  // 4. Solution Capabilities & Projects
+  if (query.includes("project") || query.includes("portfolio") || query.includes("work") || query.includes("case study") || query.includes("solution")) {
+    return `🚀 **SOLVIX Solution Capabilities:**
 
-1. **SimPill (Healthcare & CV):** AI-driven pill recognition and medication tracking using OpenCV, Python, React, and Node.js.
-2. **ZenMed (Healthcare Portal):** Diabetes assistant and patient health tracking portal (Flask, SQLite, MediaPipe).
-3. **Telemedicine Platform:** Digital healthcare consultation and patient records system (React, Node.js, Express, Supabase).
-4. **Petition Response Engine (AI/NLP):** Automated petition classification, urgency analysis, duplicate detection, and analytics dashboard.
+1. **Enterprise Web Applications & Portals** (Custom CMS, Dashboards, Corporate Sites)
+2. **Cross-Platform Mobile Applications** (**Dart**, Flutter, Android & iOS Apps)
+3. **AI Solutions & Automation** (Custom AI Chatbots, Support Automation, Document Processing)
+4. **Custom Business Software** (CRM Systems, ERP Platforms, Inventory & Payroll)
 
-Would you like a custom build tailored for your business?`;
+Would you like to discuss a custom build tailored for your business?`;
   }
 
   // 5. Pricing & Budget Guidance

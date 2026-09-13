@@ -20,34 +20,6 @@ const solvixKnowledge = {
     website: "https://www.solvixsoftwaresolutions.com",
   },
 
-  // Official Real SOLVIX Projects (DO NOT invent others)
-  realProjects: [
-    {
-      name: "SimPill",
-      category: "Healthcare / Computer Vision",
-      description: "Pill recognition and medication tracking application using computer vision and advanced software development.",
-      techStack: ["Python", "OpenCV", "Computer Vision", "React", "Node.js"]
-    },
-    {
-      name: "ZenMed",
-      category: "Healthcare / AI Assistant",
-      description: "Comprehensive diabetes assistant and healthcare portal.",
-      techStack: ["Flask", "SQLite", "MediaPipe/OpenCV", "Python", "HTML5/CSS3"]
-    },
-    {
-      name: "Telemedicine Platform",
-      category: "Healthcare Software",
-      description: "Healthcare-oriented digital consultation and patient record platform.",
-      techStack: ["React", "Node.js", "Express", "Supabase", "WebRTC"]
-    },
-    {
-      name: "Petition Response Engine",
-      category: "AI / NLP Solution",
-      description: "AI/NLP based petition processing system featuring automated classification, urgency analysis, duplicate detection, intelligent routing, and analytics dashboard.",
-      techStack: ["Python", "NLP", "OpenAI API", "React", "FastAPI/Flask"]
-    }
-  ],
-
   services: [
     {
       category: "Web Development",
