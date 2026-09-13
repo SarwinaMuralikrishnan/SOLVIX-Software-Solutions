@@ -1,5 +1,5 @@
 const supabase = require("../config/supabase");
-const { sendEmail } = require("../config/email");
+const emailService = require("../services/emailService");
 
 const submitContact = async (req, res) => {
   try {
@@ -24,91 +24,59 @@ const submitContact = async (req, res) => {
       });
     }
 
-    // Insert into Supabase
-        const { data, error } = await supabase
-        .from("contacts")
-        .insert([
+    // 1. Insert into Supabase / Database FIRST
+    const { data, error } = await supabase
+      .from("contacts")
+      .insert([
         {
           name,
           email,
           phone,
-          company,
+          company: company || "",
           message,
           status: "New",
         },
-    ])
-    .select();
+      ])
+      .select();
 
     if (error) {
-      console.log("SUPABASE ERROR:");
-      console.log(error);
-
+      console.error("SUPABASE CONTACT INSERT ERROR:", error);
       return res.status(500).json({
         success: false,
-        message: error.message
+        message: error.message || "Failed to save contact enquiry."
       });
     }
 
-    console.log("Inserted Successfully");
-console.log(data);
+    console.log("Contact Record Saved to Database Successfully:", data);
 
-// Email to Customer
-await sendEmail({
-  to: email,
-  subject: "SOLVIX - We Received Your Enquiry",
-  html: `
-    <h2>Thank You, ${name}!</h2>
+    // 2. Dispatch Email Notifications using Centralized Email Service
+    const contactPayload = {
+      name,
+      email,
+      phone,
+      company,
+      message
+    };
 
-    <p>We have received your enquiry successfully.</p>
+    try {
+      await emailService.sendContactConfirmation(contactPayload);
+      await emailService.sendContactNotification(contactPayload);
+    } catch (emailErr) {
+      console.error("EMAIL_NOTIFICATION_FAILED for Contact Enquiry:", emailErr.message);
+    }
 
-    <p>Our team will contact you shortly.</p>
-
-    <hr>
-
-    <b>Company:</b> ${company || "N/A"}<br>
-    <b>Phone:</b> ${phone}<br>
-    <b>Message:</b> ${message}
-
-    <br><br>
-
-    <p>Regards,<br><b>SOLVIX Technologies</b></p>
-  `,
-});
-
-// Email to Founders
-await sendEmail({
-  to: [
-    "sarwinamuralikrishnan07feb@gmail.com",
-    "subetha076@gmail.com"
-  ],
-  subject: "🚀 New Contact Enquiry Received",
-  html: `
-    <h2>New Contact Enquiry</h2>
-
-    <p><b>Name:</b> ${name}</p>
-    <p><b>Email:</b> ${email}</p>
-    <p><b>Phone:</b> ${phone}</p>
-    <p><b>Company:</b> ${company || "N/A"}</p>
-
-    <p><b>Message:</b></p>
-
-    <p>${message}</p>
-  `,
-});
-
-return res.status(200).json({
-  success: true,
-  message: "Contact enquiry submitted successfully.",
-  data,
-});
+    return res.status(200).json({
+      success: true,
+      message: "Contact enquiry submitted successfully.",
+      data,
+    });
 
   } catch (err) {
-    console.log("SERVER ERROR:");
-    console.log(err);
+    console.error("CONTACT CONTROLLER ERROR:", err);
 
     return res.status(500).json({
       success: false,
-      message: err.message
+      message: err.message || "Internal server error."
     });
   }
 };

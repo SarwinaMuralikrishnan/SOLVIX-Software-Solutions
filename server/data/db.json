@@ -1,6 +1,26 @@
 {
   "contacts": [
     {
+      "id": "REC-544843-0",
+      "created_at": "2026-09-13T06:05:44.843Z",
+      "status": "New",
+      "name": "Audit Tester",
+      "email": "test@solvix.com",
+      "phone": "9876543210",
+      "company": "Audit Corp",
+      "message": "Testing contact submission from automated audit script."
+    },
+    {
+      "id": "REC-849607-0",
+      "created_at": "2026-09-13T05:54:09.607Z",
+      "status": "New",
+      "name": "Sarwina",
+      "email": "sarwinamuralikrishnan07feb@gmail.com",
+      "phone": "9894088401",
+      "company": "M",
+      "message": "Website for my startup"
+    },
+    {
       "id": "REC-033763-0",
       "created_at": "2026-09-12T09:23:53.763Z",
       "status": "New",
@@ -32,6 +52,19 @@
     }
   ],
   "consultations": [
+    {
+      "id": "REC-545947-0",
+      "created_at": "2026-09-13T06:05:45.947Z",
+      "status": "New",
+      "name": "Audit Tester",
+      "email": "test@solvix.com",
+      "phone": "9876543210",
+      "company": "Audit Corp",
+      "meeting_type": "Google Meet",
+      "preferred_date": "2026-09-15",
+      "preferred_time": "10:00 AM IST",
+      "description": "Testing consultation booking from audit script."
+    },
     {
       "id": "REC-033802-0",
       "created_at": "2026-09-12T09:23:53.802Z",
@@ -73,6 +106,32 @@
     }
   ],
   "quotes": [
+    {
+      "id": "REC-545648-0",
+      "created_at": "2026-09-13T06:05:45.649Z",
+      "status": "New",
+      "name": "Audit Tester",
+      "email": "test@solvix.com",
+      "phone": "9876543210",
+      "company": "Audit Corp",
+      "service": "Business Website",
+      "budget": "₹25,000 – ₹50,000",
+      "timeline": "2–4 Weeks",
+      "description": "Testing quote submission from automated audit script."
+    },
+    {
+      "id": "REC-806056-0",
+      "created_at": "2026-09-13T05:53:26.056Z",
+      "status": "New",
+      "name": "Sarwina Muralikrishnan",
+      "email": "sarwinamuralikrishnan07feb@gmail.com",
+      "phone": "9894088401",
+      "company": "",
+      "service": "Web Development",
+      "budget": "₹25,000 – ₹50,000",
+      "timeline": "2–4 Weeks",
+      "description": "I need website for my portfolio"
+    },
     {
       "id": "REC-033785-0",
       "created_at": "2026-09-12T09:23:53.785Z",
@@ -127,6 +186,12 @@
     }
   ],
   "subscribers": [
+    {
+      "id": "REC-546201-0",
+      "created_at": "2026-09-13T06:05:46.201Z",
+      "status": "Active",
+      "email": "newslettertest@solvix.com"
+    },
     {
       "id": "REC-033822-0",
       "created_at": "2026-09-12T09:23:53.822Z",

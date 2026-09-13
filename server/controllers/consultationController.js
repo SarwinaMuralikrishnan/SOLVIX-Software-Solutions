@@ -1,6 +1,5 @@
 const supabase = require("../config/supabase");
-const { sendEmail } = require("../config/email");
-const { getConsultationFounderEmail, getConsultationCustomerEmail } = require("../services/emailTemplates");
+const emailService = require("../services/emailService");
 
 exports.createConsultation = async (req, res) => {
   try {
@@ -42,7 +41,7 @@ exports.createConsultation = async (req, res) => {
       });
     }
 
-    // Insert into Supabase 'consultations' table
+    // 1. Insert into Supabase 'consultations' table FIRST
     const { data, error } = await supabase
       .from("consultations")
       .insert([
@@ -61,49 +60,51 @@ exports.createConsultation = async (req, res) => {
       .select();
 
     if (error) {
-      console.log("SUPABASE ERROR:");
-      console.log(error);
-
+      console.error("SUPABASE CONSULTATION INSERT ERROR:", error);
       return res.status(500).json({
         success: false,
-        message: error.message
+        message: error.message || "Failed to save consultation booking."
       });
     }
 
     console.log("Consultation Inserted Successfully into Supabase:", data);
 
-    // Send dual email notifications via Resend
+    // 2. Send dual email notifications via Centralized Email Service
     const consultationPayload = {
       name,
       email,
       phone,
       company,
+      meetingType: selectedMeetingType,
       meeting_type: selectedMeetingType,
+      preferredDate: selectedDate,
       preferred_date: selectedDate,
+      preferredTime: selectedTime,
       preferred_time: selectedTime,
       description
     };
 
-    const customerMail = getConsultationCustomerEmail(consultationPayload);
-    const founderMail = getConsultationFounderEmail(consultationPayload);
+    try {
+      await emailService.sendConsultationConfirmation(consultationPayload);
+      await emailService.sendConsultationNotification(consultationPayload);
+    } catch (emailErr) {
+      console.error("EMAIL_NOTIFICATION_FAILED for Consultation Booking:", emailErr.message);
+    }
 
-    await sendEmail(customerMail);
-    await sendEmail(founderMail);
-
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
-      message: "Consultation booked successfully. Email confirmation sent.",
+      message: "Consultation booked successfully.",
       data: {
         id: data && data[0] ? data[0].id : "CNS-RECORDED"
       }
     });
 
   } catch (err) {
-    console.log("CONSULTATION CONTROLLER ERROR:", err);
+    console.error("CONSULTATION CONTROLLER ERROR:", err);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      message: err.message
+      message: err.message || "Internal server error."
     });
   }
 };

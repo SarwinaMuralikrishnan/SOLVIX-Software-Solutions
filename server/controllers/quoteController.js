@@ -1,6 +1,5 @@
 const supabase = require("../config/supabase");
-const { sendEmail } = require("../config/email");
-const { getQuoteFounderEmail, getQuoteCustomerEmail } = require("../services/emailTemplates");
+const emailService = require("../services/emailService");
 
 exports.createQuote = async (req, res) => {
   try {
@@ -11,12 +10,14 @@ exports.createQuote = async (req, res) => {
       company,
       category,
       service,
+      projectType,
       budgetRange,
       budget,
       expectedTimeline,
       timeline,
       description,
       meetingMethod,
+      requiredFeatures,
       fileName
     } = req.body;
 
@@ -25,7 +26,7 @@ exports.createQuote = async (req, res) => {
     console.log(req.body);
     console.log("=================================");
 
-    const selectedService = service || category;
+    const selectedService = service || category || projectType;
     const selectedBudget = budget || budgetRange;
     const selectedTimeline = timeline || expectedTimeline;
 
@@ -44,7 +45,7 @@ exports.createQuote = async (req, res) => {
       });
     }
 
-    // Insert into Supabase 'quotes' table
+    // 1. Insert into Supabase 'quotes' table FIRST
     const { data, error } = await supabase
       .from("quotes")
       .insert([
@@ -63,49 +64,51 @@ exports.createQuote = async (req, res) => {
       .select();
 
     if (error) {
-      console.log("SUPABASE ERROR:");
-      console.log(error);
-
+      console.error("SUPABASE QUOTE INSERT ERROR:", error);
       return res.status(500).json({
         success: false,
-        message: error.message
+        message: error.message || "Failed to save quote request."
       });
     }
 
     console.log("Quote Inserted Successfully into Supabase:", data);
 
-    // Send dual email notifications via Resend
+    // 2. Send dual email notifications via Centralized Email Service
     const quotePayload = {
       name,
       email,
       phone,
       company,
+      category,
       service: selectedService,
+      projectType: projectType || selectedService,
       budget: selectedBudget,
       timeline: selectedTimeline,
       description,
       meetingMethod,
+      requiredFeatures,
       fileName
     };
 
-    const customerMail = getQuoteCustomerEmail(quotePayload);
-    const founderMail = getQuoteFounderEmail(quotePayload);
-
-    await sendEmail(customerMail);
-    await sendEmail(founderMail);
+    try {
+      await emailService.sendQuoteConfirmation(quotePayload);
+      await emailService.sendQuoteNotification(quotePayload);
+    } catch (emailErr) {
+      console.error("EMAIL_NOTIFICATION_FAILED for Quote Request:", emailErr.message);
+    }
 
     return res.status(201).json({
       success: true,
-      message: "Quote request submitted successfully. Email confirmation sent.",
+      message: "Quote request submitted successfully.",
       data: data ? data[0] : { id: "QTE-RECORDED" }
     });
 
   } catch (err) {
-    console.log("QUOTE CONTROLLER ERROR:", err);
+    console.error("QUOTE CONTROLLER ERROR:", err);
 
     return res.status(500).json({
       success: false,
-      message: err.message
+      message: err.message || "Internal server error."
     });
   }
 };

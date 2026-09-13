@@ -9,7 +9,14 @@ const supabaseKey = process.env.SUPABASE_ANON_KEY;
 
 let supabase;
 
-if (!supabaseUrl || !supabaseKey || supabaseUrl.includes("your-supabase")) {
+if (
+  !supabaseUrl ||
+  !supabaseKey ||
+  supabaseUrl.includes("your-supabase") ||
+  supabaseUrl.includes("your-project") ||
+  supabaseKey.includes("your_actual_supabase") ||
+  supabaseKey.includes("your-supabase")
+) {
   console.warn("⚠️ Supabase environment variables missing or placeholder.");
   console.warn("📁 Operating with persistent local file database (server/data/db.json).");
 
