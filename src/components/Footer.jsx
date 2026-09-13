@@ -1,30 +1,7 @@
-import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Clock, Github, Send, MessageCircle, Lock } from 'lucide-react';
-import { api } from '../services/api';
-import { dbService } from '../services/db';
+import React from 'react';
+import { Mail, Phone, MapPin, Clock, Github, MessageCircle, Lock } from 'lucide-react';
 
 export default function Footer({ onOpenModal, onOpenAdmin }) {
-  const [newsletterEmail, setNewsletterEmail] = useState('');
-  const [subscribed, setSubscribed] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
-
-  const handleSubscribe = async (e) => {
-    e.preventDefault();
-    setErrorMsg('');
-    if (!newsletterEmail) return;
-
-    setLoading(true);
-    try {
-      await api.subscribeNewsletter(newsletterEmail);
-      dbService.addSubscriber(newsletterEmail); // local sync fallback
-      setSubscribed(true);
-      setNewsletterEmail('');
-    } catch (err) {
-      setErrorMsg(err.message || 'Subscription failed. Please try again.');
-    }
-    setLoading(false);
-  };
 
   return (
     <footer style={{ background: '#FFFFFF', borderTop: '1px solid #E2E8F0', paddingTop: '70px', paddingBottom: '36px', position: 'relative' }}>
@@ -136,33 +113,6 @@ export default function Footer({ onOpenModal, onOpenAdmin }) {
                   +91 9894088401
                 </a>
               </div>
-            </div>
-
-            {/* Newsletter Subscription Form */}
-            <div>
-              <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#0F172A', marginBottom: '6px' }}>Subscribe to Updates</div>
-              {subscribed ? (
-                <div style={{ fontSize: '0.82rem', color: '#10B981', fontWeight: 700 }}>✓ Subscribed successfully!</div>
-              ) : (
-                <form onSubmit={handleSubscribe} style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <div style={{ display: 'flex', gap: '6px' }}>
-                    <input
-                      type="email"
-                      required
-                      placeholder="Your email address"
-                      value={newsletterEmail}
-                      onChange={(e) => setNewsletterEmail(e.target.value)}
-                      style={{ flex: 1, padding: '8px 12px', borderRadius: '8px', border: '1px solid #E2E8F0', fontSize: '0.82rem', outline: 'none' }}
-                    />
-                    <button type="submit" disabled={loading} className="btn-primary btn-sm" style={{ padding: '8px 12px' }}>
-                      <Send size={14} />
-                    </button>
-                  </div>
-                  {errorMsg && (
-                    <div style={{ fontSize: '0.75rem', color: '#DC2626' }}>{errorMsg}</div>
-                  )}
-                </form>
-              )}
             </div>
           </div>
         </div>
