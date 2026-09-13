@@ -40,9 +40,9 @@ export default function ChatInput({ onSendMessage, disabled }) {
           disabled={disabled}
           onChange={(e) => setText(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Message SOLVIX AI..."
+          placeholder="Ask anything..."
           className="solvix-input-textarea"
-          aria-label="Message SOLVIX AI"
+          aria-label="Ask anything"
         />
 
         <button

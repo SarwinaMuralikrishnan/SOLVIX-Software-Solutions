@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bot, Compass, Tag, Building2, HelpCircle } from 'lucide-react';
+import { Bot, Compass, Tag, FolderGit2, HelpCircle } from 'lucide-react';
 
 export default function QuickActions({ onSelectAction }) {
   const suggestions = [
@@ -14,13 +14,13 @@ export default function QuickActions({ onSelectAction }) {
       icon: Tag,
     },
     {
-      label: 'Tell me about SOLVIX',
-      prompt: 'Tell me about SOLVIX Software Solutions, your team, and real projects.',
-      icon: Building2,
+      label: 'Our Projects',
+      prompt: 'What real projects has SOLVIX completed?',
+      icon: FolderGit2,
     },
     {
-      label: 'Ask a Question',
-      prompt: 'Can you help me answer a technical or business question?',
+      label: 'Ask Anything',
+      prompt: 'I have a question about software, technology, or SOLVIX.',
       icon: HelpCircle,
     },
   ];
@@ -32,10 +32,11 @@ export default function QuickActions({ onSelectAction }) {
         <Bot size={28} />
       </div>
 
-      <h3 className="solvix-welcome-title">SOLVIX AI Assistant</h3>
-      <span className="solvix-welcome-subtitle">General AI & Project Consultant</span>
+      <h3 className="solvix-welcome-title">SOLVIX AI</h3>
+      <span className="solvix-welcome-subtitle">AI Assistant</span>
       <p className="solvix-welcome-desc">
-        Hi! 👋 I'm the SOLVIX AI Assistant. I can help you with SOLVIX services, pricing, projects, technical questions, business questions, or general questions. How can I help you today?
+        Hi! 👋 I'm the SOLVIX AI Assistant.<br />
+        Ask me anything about SOLVIX, our services, pricing, projects, technology, or general questions.
       </p>
 
       {/* Suggested Prompts Grid */}

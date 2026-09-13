@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Bot, Minus, X, MoreVertical, Trash2, Info, ShieldCheck, RefreshCw } from 'lucide-react';
+import { Bot, Minus, X } from 'lucide-react';
 import ChatMessage from './ChatMessage';
 import ChatInput from './ChatInput';
 import QuickActions from './QuickActions';
@@ -9,30 +9,13 @@ import './Chatbot.css';
 
 export default function SolvixAIChatbot({ onOpenQuote, onOpenConsultation }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState(() => {
-    try {
-      const saved = localStorage.getItem('solvix_chat_history');
-      return saved ? JSON.parse(saved) : [];
-    } catch (e) {
-      return [];
-    }
-  });
-
+  const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [activeEstimate, setActiveEstimate] = useState(null);
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [sessionId, setSessionId] = useState(`session-${Date.now()}`);
 
   const bodyRef = useRef(null);
   const messagesEndRef = useRef(null);
-
-  // Persist conversation state
-  useEffect(() => {
-    try {
-      localStorage.setItem('solvix_chat_history', JSON.stringify(messages.slice(-20)));
-    } catch (e) {
-      console.warn('LocalStorage error:', e);
-    }
-  }, [messages]);
 
   // Scroll to bottom on message change
   useEffect(() => {
@@ -45,8 +28,7 @@ export default function SolvixAIChatbot({ onOpenQuote, onOpenConsultation }) {
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape' && isOpen) {
-        setIsOpen(false);
-        setShowDropdown(false);
+        handleCloseChat();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -55,6 +37,21 @@ export default function SolvixAIChatbot({ onOpenQuote, onOpenConsultation }) {
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  // Open chatbot -> ALWAYS start a fresh conversation session
+  const handleOpenChat = () => {
+    setMessages([]);
+    setActiveEstimate(null);
+    setSessionId(`session-${Date.now()}`);
+    setIsOpen(true);
+  };
+
+  // Close chatbot -> Destroy current conversation context
+  const handleCloseChat = () => {
+    setIsOpen(false);
+    setMessages([]);
+    setActiveEstimate(null);
   };
 
   const handleSendMessage = async (userText) => {
@@ -71,13 +68,13 @@ export default function SolvixAIChatbot({ onOpenQuote, onOpenConsultation }) {
     setLoading(true);
 
     try {
-      // Map conversation format for backend
+      // Map current session conversation history for backend
       const formattedHistory = messages.map((m) => ({
         role: m.sender === 'user' ? 'user' : 'assistant',
         content: m.text || '',
       }));
 
-      const data = await api.sendChatMessage(userText, formattedHistory);
+      const data = await api.sendChatMessage(userText, formattedHistory, sessionId);
 
       const aiMsg = {
         id: `ai-${Date.now()}`,
@@ -94,7 +91,7 @@ export default function SolvixAIChatbot({ onOpenQuote, onOpenConsultation }) {
     } catch (error) {
       console.error('[CHATBOT ERROR]', error.code || 'UNKNOWN', error.message);
 
-      let userFacingMessage = "Sorry, I'm having trouble responding right now. Please try again in a moment.";
+      const userFacingMessage = "Sorry, I'm having trouble responding right now. Please try again in a moment.";
 
       const errorMsg = {
         id: `ai-err-${Date.now()}`,
@@ -112,15 +109,6 @@ export default function SolvixAIChatbot({ onOpenQuote, onOpenConsultation }) {
     }
   };
 
-  const handleClearChat = () => {
-    setMessages([]);
-    setActiveEstimate(null);
-    setShowDropdown(false);
-    try {
-      localStorage.removeItem('solvix_chat_history');
-    } catch (e) {}
-  };
-
   return (
     <>
       {/* 1. FLOATING BOT BUTTON */}
@@ -128,7 +116,7 @@ export default function SolvixAIChatbot({ onOpenQuote, onOpenConsultation }) {
         <div className="solvix-chat-trigger-container">
           <span className="solvix-chat-tooltip">Ask SOLVIX AI</span>
           <button
-            onClick={() => setIsOpen(true)}
+            onClick={handleOpenChat}
             className="solvix-chat-trigger-btn"
             aria-label="Ask SOLVIX AI"
           >
@@ -149,7 +137,7 @@ export default function SolvixAIChatbot({ onOpenQuote, onOpenConsultation }) {
               </div>
               <div className="solvix-header-info">
                 <h4 className="solvix-header-title">SOLVIX AI</h4>
-                <p className="solvix-header-subtitle">Project Consultant</p>
+                <p className="solvix-header-subtitle">AI Assistant</p>
                 <div className="solvix-header-status">
                   <span className="solvix-status-dot" />
                   <span>Online</span>
@@ -158,54 +146,9 @@ export default function SolvixAIChatbot({ onOpenQuote, onOpenConsultation }) {
             </div>
 
             <div className="solvix-header-actions">
-              {/* 3-Dot Settings Menu */}
-              <button
-                onClick={() => setShowDropdown(!showDropdown)}
-                className="solvix-header-icon-btn"
-                title="Options"
-                aria-label="Options"
-              >
-                <MoreVertical size={16} />
-              </button>
-
-              {showDropdown && (
-                <div className="solvix-header-dropdown">
-                  <button
-                    className="solvix-dropdown-item danger"
-                    onClick={handleClearChat}
-                  >
-                    <Trash2 size={14} />
-                    <span>Clear chat</span>
-                  </button>
-                  <button
-                    className="solvix-dropdown-item"
-                    onClick={() => {
-                      setShowDropdown(false);
-                      alert('SOLVIX AI Project Consultant provides real-time software requirement scoping, tech recommendations, and cost estimations.');
-                    }}
-                  >
-                    <Info size={14} />
-                    <span>About SOLVIX AI</span>
-                  </button>
-                  <button
-                    className="solvix-dropdown-item"
-                    onClick={() => {
-                      setShowDropdown(false);
-                      alert('Your privacy is protected. Chat interactions are used solely to generate project estimates.');
-                    }}
-                  >
-                    <ShieldCheck size={14} />
-                    <span>Privacy Notice</span>
-                  </button>
-                </div>
-              )}
-
               {/* Minimize Button */}
               <button
-                onClick={() => {
-                  setIsOpen(false);
-                  setShowDropdown(false);
-                }}
+                onClick={handleCloseChat}
                 className="solvix-header-icon-btn"
                 title="Minimize"
                 aria-label="Minimize"
@@ -215,10 +158,7 @@ export default function SolvixAIChatbot({ onOpenQuote, onOpenConsultation }) {
 
               {/* Close Button */}
               <button
-                onClick={() => {
-                  setIsOpen(false);
-                  setShowDropdown(false);
-                }}
+                onClick={handleCloseChat}
                 className="solvix-header-icon-btn"
                 title="Close"
                 aria-label="Close"
@@ -249,7 +189,7 @@ export default function SolvixAIChatbot({ onOpenQuote, onOpenConsultation }) {
                   <EstimateFlow
                     estimate={activeEstimate}
                     onRequestQuote={(type) => {
-                      setIsOpen(false);
+                      handleCloseChat();
                       if (onOpenQuote) onOpenQuote(type);
                     }}
                   />
