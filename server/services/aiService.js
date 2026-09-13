@@ -1,62 +1,38 @@
-// SOLVIX AI Service - Universal ChatGPT-Like AI Engine
+// SOLVIX AI Service - Specialized SOLVIX Software Project Assistant Engine
 const { OpenAI } = require("openai");
 const solvixKnowledge = require("../data/solvixKnowledge");
 
 const SYSTEM_PROMPT = `
-You are "SOLVIX AI", a real, general-purpose AI assistant (similar to ChatGPT) integrated into SOLVIX Software Solutions (https://www.solvixsoftwaresolutions.com).
+You are "SOLVIX AI", the official AI Assistant for SOLVIX Software Solutions (https://www.solvixsoftwaresolutions.com).
 
-MAIN BEHAVIOR & CAPABILITIES:
-1. GENERAL-PURPOSE AI:
-   - You are a fully capable AI assistant. Answer general knowledge, technical, business, programming, writing, brainstorming, and everyday questions (e.g., "What is AI?", "Explain machine learning", "What is Python?", "React vs Angular", "Help me write an email", "Give me a business idea", "How does an API work?").
-   - NEVER say "I can only answer questions about SOLVIX."
-   - If a customer asks a general question, answer it clearly and directly.
+PRIMARY SCOPE & PURPOSE:
+- You are a specialized software project consultant for SOLVIX Software Solutions.
+- Focus ONLY on SOLVIX services, custom software development, web & mobile applications, AI solutions, CRM/ERP systems, project scope, tech stack recommendations, real projects, and pricing.
+- If a user asks unrelated non-SOLVIX general knowledge questions (e.g. "What is Python?", "Write an email", "Give me a recipe", "What is the weather?"), politely refocus the conversation to SOLVIX:
+  "I am the SOLVIX AI Assistant, specialized in SOLVIX software services, custom web & mobile development, AI solutions, CRM/ERP, and project pricing. How can I help you with your software requirements today?"
 
-2. SOLVIX-SPECIFIC KNOWLEDGE & VERIFIED FACTS:
-   - Company: SOLVIX Software Solutions is a software services startup based in Coimbatore, Tamil Nadu, India. Business hours: 9:00 AM – 6:00 PM IST.
-   - Verified Services: Website Development, Web Application Development, Mobile App Development, Flutter Development, UI/UX Design, AI/ML Solutions, AI Chatbots, AI Support Solutions, AI Automation, AI Document Processing, CRM Development, ERP Development, API Development and Integration, Software Consulting, Maintenance and Support.
-   - Real Featured Projects:
-     * SimPill (Smart medication tracking and healthcare management system)
-     * ZenMed (Comprehensive healthcare and clinic management platform)
-     * Telemedicine Platform (Secure video consultation and digital prescription portal)
-     * Petition Response Engine (Automated document analysis and legal petition response system)
-   - Verified Starting Base Pricing (MUST use these exact base numbers):
-     * Business Website — ₹20,000
-     * Corporate Website — ₹40,000
-     * E-Commerce — ₹75,000
-     * Marketplace — ₹2,50,000
-     * Android App — ₹1,20,000
-     * iOS App — ₹1,50,000
-     * Flutter App — ₹2,00,000
-     * AI Chatbot — ₹60,000
-     * AI Support — ₹1,20,000
-     * AI Automation — ₹2,00,000
-     * AI Document Processing — ₹2,50,000
-     * CRM — ₹2,00,000
-     * ERP — ₹5,00,000
-   - Always state that final pricing depends on project scope, features, and requirements. Never invent additional pricing, clients, awards, or fake testimonials. If information is unavailable, say: "I don't have that specific information available right now."
+VERIFIED SOLVIX FACTS & BASE PRICING:
+- Company: SOLVIX Software Solutions based in Coimbatore, Tamil Nadu, India. Business hours: 9:00 AM – 6:00 PM IST (Mon–Sat).
+- Services & Base Pricing:
+  * Website Development (Business Website: ₹20,000 | Corporate Website: ₹40,000 | E-Commerce Website: ₹75,000 | Marketplace: ₹2,50,000)
+  * Mobile App Development (Android App: ₹1,20,000 | iOS App: ₹1,50,000 | Flutter App: ₹2,00,000)
+  * AI Solutions (AI Chatbot: ₹60,000 | AI Support: ₹1,20,000 | AI Automation: ₹2,00,000 | AI Document Processing: ₹2,50,000)
+  * Business Systems (CRM Development: ₹2,00,000 | ERP Platform: ₹5,00,000)
+  * UI/UX Design, API Development & Integration, Software Consulting, Maintenance & Support
+- Featured Real Projects:
+  * SimPill (Smart medication tracking and healthcare management system)
+  * ZenMed (Comprehensive healthcare and clinic management platform)
+  * Telemedicine Platform (Secure video consultation and digital prescription portal)
+  * Petition Response Engine (Automated document analysis and legal petition response system)
+- Pricing Note: Always state that final pricing depends on project scope, features, and requirements. Never invent unauthorized pricing, fake clients, revenue, or fake testimonials.
 
-3. CONVERSATION CONTEXT & PRONOUN RESOLUTION:
-   - Understand follow-up context across turns. If the user asks "Can you build one?" or "How much?" or "price evlo?", resolve "one", "it", "this", "that" from recent messages (e.g. if previous message discussed CRM, know they mean CRM).
-
-4. TANGLISH / MIXED LANGUAGE & INFORMAL INPUT:
-   - Understand Indian English, Tamil keywords, and Tanglish naturally (e.g. "CRM na enna?", "price evlo?", "enaku ecommerce website venum", "CRM pathi sollu", "website venum"). Answer clearly in simple, friendly English.
-
-5. TYPOS & SPELLING MISTAKES:
-   - Tolerantly understand typos ("machne learning", "javscript", "ecomerce website", "chat bot"). Answer naturally without unnecessarily pointing out spelling errors.
-
-6. RANDOM & GIBBERISH INPUT:
-   - Meaningless gibberish (e.g. "setxrctuvhbjnl", "asdfghjkl") -> Respond politely: "I'm not sure what you mean. Could you rephrase that?"
-   - Mixed random text + real question (e.g. "asdfgh what is CRM xyz123") -> extract the meaningful question and answer it.
-
-7. COMPLEX & MULTI-PART QUESTIONS:
-   - Answer all parts of complex multi-part questions clearly and comprehensively.
-
-8. RESPONSE STYLE & TONE:
-   - Professional, simple, clear, natural, friendly, and helpful.
-   - Use short paragraphs and bullet points where useful.
-   - Avoid robotic phrases ("As an AI language model...", "I am just a chatbot...").
-   - Do NOT over-promote SOLVIX on general questions (e.g. if asked "What is Python?", explain Python cleanly without appending unsolicited sales pitches).
-   - When a user shows genuine interest in a SOLVIX service, naturally suggest: "If you'd like, you can use the Request a Quote option to share your requirements with the SOLVIX team."
+CONVERSATION & INPUT HANDLING:
+- Context & Pronouns: Maintain context across turns within the current session. Resolve "how much?", "price evlo?", "can you build one?" using previous turn context.
+- Tanglish / Informal Language: Support Indian English, Tamil keywords, and Tanglish (e.g. "CRM na enna?", "Enaku ecommerce website venum", "price evlo?", "website venum").
+- Typos: Understand reasonable typos ("machne learning", "javscript", "ecomerce website", "chat bot") naturally.
+- Gibberish: Meaningless text (e.g. "setxrctuvhbjnl", "4wredrfgbhjnkm2q3wsdtyjnkl'") -> "I'm not sure what you mean. Could you please rephrase your question?"
+- Acknowledgment: Casual acknowledgments ("OKEYYYY", "ok", "thanks") -> "You're welcome! 😊 Let me know if you have any questions about SOLVIX services or pricing."
+- Tone: Professional, simple, clear, natural, helpful. Avoid robotic disclaimers ("As an AI language model...").
 `;
 
 /**
@@ -103,7 +79,7 @@ function isGibberish(str) {
 }
 
 /**
- * Smart Knowledge Engine Fallback for offline or key-unconfigured environments
+ * SOLVIX Focused Knowledge Engine (Handles SOLVIX services, pricing, projects, Tanglish, typos, gibberish & refocuses unrelated general questions)
  */
 function generateLocalKnowledgeResponse(message, conversation = [], context = {}) {
   const rawText = (message || "").trim();
@@ -122,14 +98,14 @@ function generateLocalKnowledgeResponse(message, conversation = [], context = {}
     query.startsWith("hi ") ||
     query.startsWith("hello ")
   ) {
-    return "Hi! 👋 I'm the SOLVIX AI Assistant. I can help you with SOLVIX services, pricing, projects, technical questions, business questions, or general questions. How can I help you today?";
+    return "Hi! 👋 I'm the SOLVIX AI Assistant. I can help you with SOLVIX software services, web & app development, AI solutions, CRM, ERP, real projects, and pricing. How can I help you today?";
   }
 
   // 2. Casual acknowledgments & thanks (e.g. "OKEYYYY", "ok", "thanks")
   const ackTerms = ["ok", "okay", "okeyyyy", "okey", "got it", "understood", "sure", "thanks", "thank you", "great", "awesome", "cool", "perfect", "nice"];
   const cleanWord = query.replace(/[^a-z]/g, "");
   if (ackTerms.includes(query) || ackTerms.includes(cleanWord)) {
-    return "You're welcome! 😊 Let me know if you have any questions or if you'd like to explore any of our services.";
+    return "You're welcome! 😊 Let me know if you have any questions about SOLVIX services or pricing.";
   }
 
   // 3. Gibberish check
@@ -200,7 +176,7 @@ function generateLocalKnowledgeResponse(message, conversation = [], context = {}
     if (isCanYouBuild || query.includes("need crm") || query.includes("build crm") || query.includes("want crm")) {
       return "Yes. SOLVIX can develop a custom CRM tailored to your workflow, including lead tracking, customer communication, sales pipelines, and reporting dashboards.";
     }
-    return "CRM stands for Customer Relationship Management. It is software used to manage customers, leads, sales, follow-ups, and business communication in one place.";
+    return "CRM stands for Customer Relationship Management. SOLVIX builds custom CRM software to manage customers, leads, sales pipelines, follow-ups, and business communication in one place. Starting base price is ₹2,00,000.";
   }
 
   // ERP
@@ -208,50 +184,20 @@ function generateLocalKnowledgeResponse(message, conversation = [], context = {}
     if (isPriceQuery) {
       return "Our current base price for an ERP system is ₹5,00,000. Final cost depends on modules, user roles, and customization requirements.";
     }
-    return "ERP stands for Enterprise Resource Planning. It helps businesses manage core operations such as finance, inventory, purchasing, HR, and project management in one unified system.";
+    return "ERP stands for Enterprise Resource Planning. SOLVIX develops custom ERP systems to help businesses manage finance, inventory, purchasing, HR, and operations in one unified system. Starting base price is ₹5,00,000.";
   }
 
-  // SaaS
+  // SaaS Solutions
   if (query.includes("saas")) {
-    return "SaaS stands for Software as a Service. It is software hosted in the cloud and accessed by users online, typically through a recurring subscription.";
+    return "SOLVIX builds custom SaaS (Software as a Service) web applications with multi-tenant architecture, user subscription management, and payment gateway integrations.";
   }
 
-  // Python
-  if (query.includes("python")) {
-    return "Python is a high-level, general-purpose programming language known for its clear syntax and readability. It is widely used in web development, data science, artificial intelligence, machine learning, and automation.";
-  }
-
-  // API
-  if (query.includes("api")) {
-    return "API stands for Application Programming Interface. It is a set of defined rules that allows different software applications to communicate, exchange data, and integrate seamlessly with each other.";
-  }
-
-  // Business Idea
-  if (query.includes("business idea") || query.includes("give me an idea")) {
-    return "Here are a few promising software business ideas:\n1. Custom AI customer support agents for local SMBs.\n2. Niche CRM tailored for healthcare or education providers.\n3. SaaS automated document extraction and invoice processing platform.";
-  }
-
-  // Services Inquiry
-  if (query.includes("services") || query.includes("service") || query.includes("provide") || query.includes("offer")) {
-    return "SOLVIX provides 15 core software services:\n• Website & Web Application Development\n• Mobile App Development (Android, iOS, Flutter)\n• Custom AI/ML Solutions (AI Chatbots, Support, Automation, Document Processing)\n• Business Systems (CRM & ERP Development)\n• UI/UX Design, API Integration, Consulting & Maintenance";
-  }
-
-  // Machine Learning / AI
-  if (query.includes("machine learning") || query.includes("machne lerning") || query.includes("machin lerning") || query.includes("machne")) {
-    return "Do you mean machine learning? Machine learning is a branch of artificial intelligence where computers learn patterns from data to make predictions or decisions without explicit programming.";
-  }
-  if (query.includes("what is ai") || query === "ai" || query.includes("explain ai")) {
-    return "Artificial Intelligence (AI) refers to computer systems engineered to simulate human intelligence—such as understanding natural language, recognizing patterns, solving complex problems, and making data-driven decisions.";
-  }
-
-  // JavaScript Typo
-  if (query.includes("javascrpt") || query.includes("javscript")) {
-    return "Do you mean JavaScript? JavaScript is a programming language widely used to create interactive dynamic content on modern web and mobile applications.";
-  }
-
-  // React vs Angular
-  if (query.includes("react") && query.includes("angular")) {
-    return "React is a flexible UI component library developed by Meta focusing on virtual DOM rendering, whereas Angular is a full-fledged TypeScript framework developed by Google with built-in state management, routing, and dependency injection.";
+  // Machine Learning / AI Solutions
+  if ((query.includes("machine learning") || query.includes("machne lerning") || query.includes("machin lerning") || query.includes("machne") || query.includes("ai chatbot") || query.includes("ai support") || query.includes("ai automation") || query === "ai") && !query.includes("email")) {
+    if (isPriceQuery) {
+      return "Here is our base pricing for AI Solutions:\n• **AI Chatbot:** ₹60,000\n• **AI Customer Support:** ₹1,20,000\n• **AI Automation:** ₹2,00,000\n• **AI Document Processing:** ₹2,50,000";
+    }
+    return "SOLVIX provides custom AI & Machine Learning solutions including AI Chatbots (₹60,000), AI Support Systems (₹1,20,000), AI Automation Workflows (₹2,00,000), and AI Document Processing (₹2,50,000).";
   }
 
   // E-Commerce
@@ -259,7 +205,7 @@ function generateLocalKnowledgeResponse(message, conversation = [], context = {}
     if (isPriceQuery) {
       return "Our base pricing for an E-Commerce Website is ₹75,000, while a Multi-Vendor Marketplace starts at ₹2,50,000. Final pricing depends on project scope, payment integrations, and design complexity.";
     }
-    return "SOLVIX provides custom E-Commerce solutions with secure payment gateways, cart management, inventory tracking, customer accounts, and order management dashboards.";
+    return "SOLVIX provides custom E-Commerce web development with secure payment gateways, cart management, inventory tracking, customer accounts, and order dashboards. Base price starts at ₹75,000.";
   }
 
   // General Website Queries
@@ -289,16 +235,16 @@ function generateLocalKnowledgeResponse(message, conversation = [], context = {}
   }
 
   // SOLVIX Details & Hours
-  if (query.includes("solvix") || query.includes("company") || query.includes("about")) {
+  if (query.includes("solvix") || query.includes("company") || query.includes("about") || query.includes("location") || query.includes("address") || query.includes("coimbatore") || query.includes("hours")) {
     return "SOLVIX Software Solutions is a software services startup based in Coimbatore, Tamil Nadu, India.\n\n• **Business Hours:** 9:00 AM – 6:00 PM IST (Mon–Sat)\n• **Services:** Web & App Development, AI/ML Solutions, AI Chatbots, Custom CRM, ERP, API Integration, Software Consulting, UI/UX Design.\n• **Location:** Coimbatore, Tamil Nadu, India";
   }
 
-  // Default Fallback
-  return "I'm not sure what you mean. Could you please rephrase your question?";
+  // Refocus non-SOLVIX general queries (e.g. "What is Python?", "Write an email", "Weather in Tokyo")
+  return "I am the SOLVIX AI Assistant, specialized in SOLVIX software services, custom web & mobile development, AI solutions, CRM/ERP, and project pricing. How can I help you with your software requirements today?";
 }
 
 /**
- * Generate AI Chat Response using configured LLM provider (OpenAI / custom endpoint) or local fallback
+ * Generate AI Chat Response using configured LLM provider or Focused SOLVIX Knowledge Engine
  */
 async function generateChatResponse(message, conversation = [], context = {}) {
   const apiKey = process.env.LLM_API_KEY || process.env.OPENAI_API_KEY;
@@ -307,7 +253,7 @@ async function generateChatResponse(message, conversation = [], context = {}) {
 
   // Check if API key is valid
   if (!apiKey || apiKey.trim() === "" || apiKey === "your_openai_api_key_here") {
-    console.log("[CHAT] Using SOLVIX Natural Knowledge Engine (Local Fallback)");
+    console.log("[CHAT] Using SOLVIX Focused Knowledge Engine");
     const reply = generateLocalKnowledgeResponse(message, conversation, context);
     return {
       success: true,
