@@ -60,15 +60,19 @@ MAIN BEHAVIOR & CAPABILITIES:
 `;
 
 /**
- * Lightweight Gibberish Detector
+ * Robust Gibberish Detector
  */
 function isGibberish(str) {
-  const text = (str || "").trim();
+  const raw = (str || "").trim();
+  const text = raw.replace(/[^a-z0-9\s]/gi, "");
   if (text.length < 4) return false;
 
   const techTerms = ["crm", "erp", "saas", "website", "app", "solvix", "flutter", "react", "python", "ai", "ml", "api", "clothing"];
   const containsTech = techTerms.some(term => text.toLowerCase().includes(term));
   if (containsTech) return false;
+
+  // Single word with mashed letters/numbers
+  if (/^[a-z0-9]{8,}$/i.test(text) && !/(?:[aeiou]{2,}|the|what|how|where|when|which|who|can|will|you|your|our|this|that|with|for|have|need|want|build)/i.test(text)) return true;
 
   // Multi-word keyboard mashes
   if (text.includes(" ")) {
@@ -79,7 +83,8 @@ function isGibberish(str) {
         /^[bcdfghjklmnpqrstvwxyz]{5,}$/i.test(word) ||
         /^[qwertyuiop]{6,}$/i.test(word) ||
         /^[asdfghjkl]{6,}$/i.test(word) ||
-        /^[zxcvbnm]{6,}$/i.test(word)
+        /^[zxcvbnm]{6,}$/i.test(word) ||
+        (/^[a-z0-9]{7,}$/i.test(word) && !/[aeiou]/i.test(word))
       ) {
         gibberishWordCount++;
       }
@@ -92,7 +97,7 @@ function isGibberish(str) {
   if (/^[qwertyuiop]{6,}$/i.test(text)) return true;
   if (/^[asdfghjkl]{6,}$/i.test(text)) return true;
   if (/^[zxcvbnm]{6,}$/i.test(text)) return true;
-  if (/^[a-z0-9]{10,}$/i.test(text) && !/[aeiou]/i.test(text)) return true;
+  if (/^[a-z0-9]{8,}$/i.test(text) && !/[aeiou]/i.test(text)) return true;
 
   return false;
 }
@@ -120,9 +125,16 @@ function generateLocalKnowledgeResponse(message, conversation = [], context = {}
     return "Hi! 👋 I'm the SOLVIX AI Assistant. I can help you with SOLVIX services, pricing, projects, technical questions, business questions, or general questions. How can I help you today?";
   }
 
-  // 2. Gibberish check
+  // 2. Casual acknowledgments & thanks (e.g. "OKEYYYY", "ok", "thanks")
+  const ackTerms = ["ok", "okay", "okeyyyy", "okey", "got it", "understood", "sure", "thanks", "thank you", "great", "awesome", "cool", "perfect", "nice"];
+  const cleanWord = query.replace(/[^a-z]/g, "");
+  if (ackTerms.includes(query) || ackTerms.includes(cleanWord)) {
+    return "You're welcome! 😊 Let me know if you have any questions or if you'd like to explore any of our services.";
+  }
+
+  // 3. Gibberish check
   if (isGibberish(rawText)) {
-    return "I'm not sure what you mean. Could you rephrase that?";
+    return `I'm not sure what you mean by \`${rawText}\`. Could you please rephrase your question?`;
   }
 
   // Extract last context topic from conversation history if available
@@ -137,7 +149,7 @@ function generateLocalKnowledgeResponse(message, conversation = [], context = {}
     else if (userAndAiMsgs.includes("chatbot") || userAndAiMsgs.includes("ai support")) lastTopic = "chatbot";
   }
 
-  // 3. Pronoun / Follow-up resolution ("how much?", "price evlo?", "can you build one?", "how much is it?")
+  // 4. Pronoun / Follow-up resolution ("how much?", "price evlo?", "can you build one?", "how much is it?")
   const isPriceQuery = query.includes("how much") || query.includes("price") || query.includes("cost") || query.includes("evlo") || query.includes("charge");
   const isCanYouBuild = query.includes("can you build") || query.includes("can you make") || query.includes("can you develop") || query.includes("pannanum");
   const isWebsiteReq = query.includes("website") || query.includes("site");
@@ -174,7 +186,7 @@ function generateLocalKnowledgeResponse(message, conversation = [], context = {}
     return "Yes, SOLVIX can build a custom CRM for a hospital. Recommended features include patient record management, appointment scheduling, doctor availability tracking, billing integration, and medical history access. Our starting base price for custom CRM development is ₹2,00,000, with final cost depending on specific requirements.";
   }
 
-  // 4. Tanglish / Intent Matching
+  // 5. Tanglish / Intent Matching
   // Clothing business context
   if (query.includes("clothing")) {
     return "A business or e-commerce website could be suitable for a clothing business. If you want customers to browse products, manage inventory, and place orders online, an e-commerce website is the ideal choice. SOLVIX base pricing for E-Commerce starts at ₹75,000.";
@@ -257,7 +269,7 @@ function generateLocalKnowledgeResponse(message, conversation = [], context = {}
     if (isPriceQuery) {
       return "Here is our base pricing for Website Development:\n• **Business Website:** ₹20,000\n• **Corporate Website:** ₹40,000\n• **E-Commerce Website:** ₹75,000\n• **Marketplace:** ₹2,50,000\n\nFinal cost depends on your exact project requirements.";
     }
-    return "SOLVIX builds responsive, fast websites tailored to your business requirements. What type of website are you looking for—business, corporate, or e-commerce?";
+    return "SOLVIX builds responsive, fast websites tailored to your business requirements. We offer Business Websites (from ₹20,000), Corporate Websites (from ₹40,000), and E-Commerce Websites (from ₹75,000). What type of website are you looking for?";
   }
 
   // Mobile App Queries
@@ -268,7 +280,7 @@ function generateLocalKnowledgeResponse(message, conversation = [], context = {}
     if (query.includes("flutter")) return "SOLVIX develops cross-platform Flutter mobile applications for both Android & iOS. Starting base price is ₹2,00,000.";
     if (query.includes("android")) return "Our starting base price for a native Android application is ₹1,20,000.";
     if (query.includes("ios")) return "Our starting base price for a native iOS application is ₹1,50,000.";
-    return "SOLVIX develops native Android/iOS and cross-platform Flutter mobile apps. What features do you need in your app?";
+    return "SOLVIX develops native Android/iOS and cross-platform Flutter mobile apps. Starting prices: Android (₹1,20,000), iOS (₹1,50,000), Flutter (₹2,00,000). What features do you need in your app?";
   }
 
   // Real Projects Inquiry
