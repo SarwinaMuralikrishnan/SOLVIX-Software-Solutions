@@ -309,7 +309,7 @@ export default function Contact() {
                   style={{ width: '100%', justifyContent: 'center', padding: '13px' }}
                 >
                   <Send size={18} />
-                  <span>{loading ? 'Sending Message...' : 'Send Message'}</span>
+                  <span>{loading ? 'Sending Request...' : 'Send Request'}</span>
                 </button>
               </form>
             )}

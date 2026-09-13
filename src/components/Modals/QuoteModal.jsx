@@ -644,7 +644,7 @@ export default function QuoteModal({ prefilledType = 'Business Website', onClose
                 style={{ width: '100%', justifyContent: 'center', padding: '14px' }}
               >
                 <Send size={18} />
-                <span>{loading ? 'Submitting Proposal Request...' : 'Submit Proposal Request'}</span>
+                <span>{loading ? 'Submitting Request...' : 'Submit Request'}</span>
               </button>
             </form>
           )}

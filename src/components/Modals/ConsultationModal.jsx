@@ -364,7 +364,7 @@ export default function ConsultationModal({ title = 'Book a Free Technical Consu
                 style={{ width: '100%', justifyContent: 'center', padding: '13px' }}
               >
                 <Send size={18} />
-                <span>{loading ? 'Booking Session...' : 'Confirm Consultation Booking'}</span>
+                <span>{loading ? 'Submitting Request...' : 'Submit Request'}</span>
               </button>
             </form>
           )}
