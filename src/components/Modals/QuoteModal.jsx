@@ -83,6 +83,7 @@ export default function QuoteModal({ prefilledType = 'Business Website', onClose
   const [userTokenInput, setUserTokenInput] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [submittedEmail, setSubmittedEmail] = useState('');
   const [quoteId, setQuoteId] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
   const [loading, setLoading] = useState(false);
@@ -212,6 +213,7 @@ export default function QuoteModal({ prefilledType = 'Business Website', onClose
 
       setQuoteId(result.data?.id || 'QTE-LIVE');
       setSuccessMsg(result.message || 'Your enquiry has been submitted successfully. A confirmation email has been sent to you. Our team will contact you within one business day.');
+      setSubmittedEmail(formData.email);
       setFormData({
         name: '',
         email: '',
@@ -337,7 +339,7 @@ export default function QuoteModal({ prefilledType = 'Business Website', onClose
                 Quote Reference ID: {quoteId}
               </div>
               <p style={{ color: '#475569', fontSize: '0.96rem', lineHeight: 1.6, marginBottom: '24px' }}>
-                Notification alerts were dispatched to both founders (sarwinamuralikrishnan@gmail.com & subetha076@gmail.com). An auto-reply confirmation email has been sent to <strong>{formData.email}</strong>.
+                Notification alerts were dispatched to the SOLVIX team. An auto-reply confirmation email has been sent to <strong>{submittedEmail || 'your email address'}</strong>.
               </p>
               <button onClick={onClose} className="btn-primary" style={{ width: '100%', maxWidth: '280px', justifyContent: 'center' }}>
                 Done & Close

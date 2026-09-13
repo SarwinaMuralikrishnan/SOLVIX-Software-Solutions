@@ -16,6 +16,7 @@ export default function Contact() {
   const [userTokenInput, setUserTokenInput] = useState('SOLVIX');
   const [errorMsg, setErrorMsg] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [submittedEmail, setSubmittedEmail] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -67,6 +68,7 @@ export default function Contact() {
       });
 
       setSuccessMsg(result.message || 'Enquiry submitted successfully');
+      setSubmittedEmail(formData.email);
       setFormData({ name: '', email: '', phone: '', company: '', message: '' });
       setLoading(false);
       setSubmitted(true);
@@ -198,7 +200,7 @@ export default function Contact() {
                   {successMsg}
                 </h4>
                 <p style={{ color: '#475569', fontSize: '0.96rem', lineHeight: 1.65, marginBottom: '24px' }}>
-                  Notification alerts were dispatched to both founders (sarwinamuralikrishnan@gmail.com & subetha076@gmail.com). An auto-reply confirmation email has been sent to <strong>{formData.email}</strong>.
+                  Notification alerts were dispatched to the SOLVIX team. An auto-reply confirmation email has been sent to <strong>{submittedEmail || 'your email address'}</strong>.
                 </p>
                 <button onClick={() => setSubmitted(false)} className="btn-secondary">
                   Send Another Message
