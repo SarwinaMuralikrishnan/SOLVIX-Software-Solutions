@@ -10,10 +10,10 @@ export default function Pricing({ onOpenQuote, onOpenConsultation }) {
     { id: 'Mobile App Development', label: 'Mobile App', icon: Smartphone, color: '#10B981' },
     { id: 'AI Solutions', label: 'AI Solutions', icon: Bot, color: '#7C3AED' },
     { id: 'Business Software', label: 'Business Software', icon: Briefcase, color: '#F59E0B' },
-    { id: 'Healthcare', label: 'Healthcare', icon: Stethoscope, color: '#EF4444' },
+    { id: 'Healthcare', label: 'Healthcare', icon: Stethoscope, color: '#10B981' },
     { id: 'Education', label: 'Education', icon: GraduationCap, color: '#D97706' },
     { id: 'Cloud & DevOps', label: 'Cloud & DevOps', icon: Cloud, color: '#06B6D4' },
-    { id: 'Security', label: 'Security', icon: Lock, color: '#059669' },
+    { id: 'Security', label: 'Security', icon: Lock, color: '#EF4444' },
     { id: 'Custom Development', label: 'Custom Dev', icon: Settings, color: '#6366F1' },
   ];
 
@@ -83,9 +83,9 @@ export default function Pricing({ onOpenQuote, onOpenConsultation }) {
       id: 'Healthcare',
       title: 'Healthcare Software',
       badge: '🏥 HEALTHCARE',
-      color: '#EF4444',
-      bgLight: 'rgba(239, 68, 68, 0.05)',
-      borderColor: 'rgba(239, 68, 68, 0.2)',
+      color: '#10B981',
+      bgLight: 'rgba(16, 185, 129, 0.05)',
+      borderColor: 'rgba(16, 185, 129, 0.2)',
       icon: Stethoscope,
       cards: [
         { title: 'Hospital Management System', desc: 'Multi-module hospital ERP covering IPD, OPD billing, pharmacy, and laboratory reports.', price: '₹2,50,000', timeline: '6 – 8 Weeks', icon: Stethoscope },
@@ -124,9 +124,9 @@ export default function Pricing({ onOpenQuote, onOpenConsultation }) {
       id: 'Security',
       title: 'Security',
       badge: '🔒 SECURITY',
-      color: '#059669',
-      bgLight: 'rgba(5, 150, 105, 0.05)',
-      borderColor: 'rgba(5, 150, 105, 0.2)',
+      color: '#EF4444',
+      bgLight: 'rgba(239, 68, 68, 0.05)',
+      borderColor: 'rgba(239, 68, 68, 0.2)',
       icon: Lock,
       cards: [
         { title: 'Authentication System', desc: 'Zero-trust auth architecture with JWT, OAuth2 social login, and 2FA multi-factor OTP.', price: '₹35,000', timeline: '1 – 2 Weeks', icon: Lock },
