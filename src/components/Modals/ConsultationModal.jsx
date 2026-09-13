@@ -113,7 +113,7 @@ export default function ConsultationModal({ title = 'Book a Free Technical Consu
       setSubmitted(true);
     } catch (err) {
       setLoading(false);
-      setErrorMsg(err.message || 'Unable to connect to SOLVIX backend server. Please try again.');
+      setErrorMsg(err.message || 'Unable to book consultation at this time. Please try again or contact us directly.');
     }
   };
 
@@ -364,7 +364,7 @@ export default function ConsultationModal({ title = 'Book a Free Technical Consu
                 style={{ width: '100%', justifyContent: 'center', padding: '13px' }}
               >
                 <Send size={18} />
-                <span>{loading ? 'Submitting to Express API...' : 'Submit via API'}</span>
+                <span>{loading ? 'Booking Session...' : 'Confirm Consultation Booking'}</span>
               </button>
             </form>
           )}

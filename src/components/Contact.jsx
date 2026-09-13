@@ -74,7 +74,7 @@ export default function Contact() {
       setSubmitted(true);
     } catch (err) {
       setLoading(false);
-      setErrorMsg(err.message || 'Unable to connect to SOLVIX backend server. Please check your backend connection.');
+      setErrorMsg(err.message || 'Unable to send message at this time. Please try again or contact us directly.');
     }
   };
 
@@ -210,7 +210,7 @@ export default function Contact() {
               <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
                 <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#0F172A', marginBottom: '4px' }}>Send Us an Enquiry</h3>
                 <p style={{ color: '#64748B', fontSize: '0.88rem', marginBottom: '4px' }}>
-                  Submits directly to Express REST API endpoint <code>POST /api/contact</code>.
+                  Fill out the details below and our team will get back to you within 24 hours.
                 </p>
 
                 {errorMsg && (
@@ -309,7 +309,7 @@ export default function Contact() {
                   style={{ width: '100%', justifyContent: 'center', padding: '13px' }}
                 >
                   <Send size={18} />
-                  <span>{loading ? 'Submitting to Express API...' : 'Submit via API'}</span>
+                  <span>{loading ? 'Sending Message...' : 'Send Message'}</span>
                 </button>
               </form>
             )}

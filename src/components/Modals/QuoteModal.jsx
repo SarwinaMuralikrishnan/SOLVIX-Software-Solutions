@@ -230,7 +230,7 @@ export default function QuoteModal({ prefilledType = 'Business Website', onClose
       setSubmitted(true);
     } catch (err) {
       setLoading(false);
-      setErrorMsg(err.message || 'Unable to connect to SOLVIX backend server. Please try again.');
+      setErrorMsg(err.message || 'Unable to submit quote request at this time. Please try again or contact us directly.');
     }
   };
 
@@ -644,7 +644,7 @@ export default function QuoteModal({ prefilledType = 'Business Website', onClose
                 style={{ width: '100%', justifyContent: 'center', padding: '14px' }}
               >
                 <Send size={18} />
-                <span>{loading ? 'Submitting to Express API...' : 'Submit via API'}</span>
+                <span>{loading ? 'Submitting Proposal Request...' : 'Submit Proposal Request'}</span>
               </button>
             </form>
           )}

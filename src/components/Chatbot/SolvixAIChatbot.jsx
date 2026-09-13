@@ -94,17 +94,7 @@ export default function SolvixAIChatbot({ onOpenQuote, onOpenConsultation }) {
     } catch (error) {
       console.error('[CHATBOT ERROR]', error.code || 'UNKNOWN', error.message);
 
-      let userFacingMessage = "SOLVIX AI is temporarily unavailable. Please try again in a moment.";
-
-      if (error.code === 'NETWORK_ERROR') {
-        userFacingMessage = "Unable to connect to SOLVIX AI right now. Please check that the SOLVIX backend server is running.";
-      } else if (error.code === 'AI_NOT_CONFIGURED') {
-        userFacingMessage = "SOLVIX AI is not configured on the server yet. (OPENAI_API_KEY missing in server/.env)";
-      } else if (error.code === 'AI_AUTH_ERROR') {
-        userFacingMessage = "AI Authentication Error: The server's OpenAI API key is invalid or expired.";
-      } else if (error.code === 'AI_RATE_LIMIT') {
-        userFacingMessage = "OpenAI API rate limit exceeded. Please wait a moment before sending another message.";
-      }
+      let userFacingMessage = "SOLVIX AI assistant is temporarily offline. Please use the options below to connect with our team directly.";
 
       const errorMsg = {
         id: `ai-err-${Date.now()}`,

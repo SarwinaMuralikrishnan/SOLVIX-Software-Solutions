@@ -208,7 +208,7 @@ export default function LiveDemoModal({ productName, onClose, onBuyNow }) {
                 </div>
                 <div style={{ display: 'flex', gap: '12px', color: 'var(--text-secondary)' }}>
                   <span>[10:06:55]</span>
-                  <span>API Call: /api/v1/{productName ? productName.toLowerCase().replace(/ /g, '-') : 'system'}/query [Status 200 OK]</span>
+                  <span>Data Sync: {productName || 'System'} real-time stream synchronized [Status OK]</span>
                 </div>
               </div>
             </div>
