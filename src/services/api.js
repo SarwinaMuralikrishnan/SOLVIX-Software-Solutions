@@ -46,7 +46,7 @@ export const api = {
       return await handleResponse(response);
     } catch (error) {
       if (error.name === 'TypeError' && error.message.includes('fetch')) {
-        throw new Error('Unable to connect to SOLVIX backend server (http://localhost:5000). Please check that your Express server is running.');
+        throw new Error('Unable to connect to SOLVIX services. Please check your internet connection or try again in a moment.');
       }
       throw error;
     }
@@ -63,7 +63,7 @@ export const api = {
       return await handleResponse(response);
     } catch (error) {
       if (error.name === 'TypeError' && error.message.includes('fetch')) {
-        throw new Error('Unable to connect to SOLVIX backend server (http://localhost:5000). Please check that your Express server is running.');
+        throw new Error('Unable to connect to SOLVIX services. Please check your internet connection or try again in a moment.');
       }
       throw error;
     }
@@ -80,7 +80,7 @@ export const api = {
       return await handleResponse(response);
     } catch (error) {
       if (error.name === 'TypeError' && error.message.includes('fetch')) {
-        throw new Error('Unable to connect to SOLVIX backend server (http://localhost:5000). Please check that your Express server is running.');
+        throw new Error('Unable to connect to SOLVIX services. Please check your internet connection or try again in a moment.');
       }
       throw error;
     }
@@ -97,7 +97,7 @@ export const api = {
       return await handleResponse(response);
     } catch (error) {
       if (error.name === 'TypeError' && error.message.includes('fetch')) {
-        throw new Error('Unable to connect to SOLVIX backend server.');
+        throw new Error('Unable to connect to SOLVIX services. Please check your internet connection or try again in a moment.');
       }
       throw error;
     }
@@ -140,7 +140,7 @@ export const api = {
       return await handleResponse(response);
     } catch (error) {
       if (error.name === 'TypeError' && error.message.includes('fetch')) {
-        throw new Error('Unable to connect to SOLVIX backend server (http://localhost:5000). Please ensure your Express backend is running.');
+        throw new Error('Unable to connect to SOLVIX services. Please check your internet connection or try again in a moment.');
       }
       throw error;
     }
@@ -211,6 +211,7 @@ export const api = {
       const response = await fetch(`${API_BASE_URL}/admin/enquiries/${type}/${id}`, {
         method: 'DELETE',
         headers: getHeaders(true),
+        body: JSON.stringify({ type }),
       });
       return await handleResponse(response);
     } catch (error) {
@@ -253,7 +254,7 @@ export const api = {
       return await handleResponse(response);
     } catch (error) {
       if (error.name === 'TypeError' && error.message.includes('fetch')) {
-        const netErr = new Error('Unable to connect to SOLVIX AI Backend server. Please verify your server is running on http://localhost:5000.');
+        const netErr = new Error('Unable to connect to SOLVIX AI services. Please check your internet connection or try again in a moment.');
         netErr.code = 'NETWORK_ERROR';
         throw netErr;
       }
